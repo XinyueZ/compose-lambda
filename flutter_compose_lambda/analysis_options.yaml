@@ -1,0 +1,22 @@
+include: package:pedantic/analysis_options.1.9.0.yaml
+
+analyzer:
+  strong-mode:
+    implicit-casts: false
+    implicit-dynamic: false
+  errors:
+    todo: ignore
+  exclude:
+    - lib/models/*.g.dart
+    - lib/models/protobuf/**
+    - third_party/**
+    - lib/models/protobuf/**
+    - lib/common/network/graphql/**
+    - lib/common/l10n/l10n.dart
+    - lib/common/network/grapql/graphql_api.graphql.dart
+    - lib/common/network/grapql/graphql_api.graphql.g.dart
+    
+linter:
+  rules:
+    prefer_single_quotes: false # 1K+ Warnings, easy to fix but doesn't make lots of sense.
+    unawaited_futures: false # This rule requires the usage of the 'pedantic' package in the project itself.
