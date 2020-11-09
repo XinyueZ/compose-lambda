@@ -15,7 +15,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -47,19 +46,18 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun BuildAppBar() {
     TopAppBar(
+        title = {
+            Text(
+                "News report",
+                modifier = Modifier
+                    .background(color = Color.Transparent),
+                style = MaterialTheme.typography.h6.copy(color = Color.White)
+            )
+        },
         elevation = 0.dp,
         modifier = Modifier
             .background(color = Color(0xFF6200EE))
-            .padding(start = 16.dp, end = 16.dp)
-    ) {
-        Text(
-            "News report",
-            modifier = Modifier
-                .align(alignment = Alignment.CenterVertically)
-                .background(color = Color.Transparent),
-            style = MaterialTheme.typography.h6.copy(color = Color.White)
-        )
-    }
+    )
 }
 
 
