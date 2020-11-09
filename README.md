@@ -10,8 +10,8 @@
 
 
 
-Android: [MainActivity.kt](app/src/main/java/com/example/composelambda/MainActivity.kt)
+Android: [MainActivity.kt](android/app/src/main/java/com/example/composelambda/MainActivity.kt)
 
-Flutter: [main.dart](flutter_compose_lambda/lib/main.dart)
+Flutter: [main.dart](flutter/lib/main.dart)
 
 

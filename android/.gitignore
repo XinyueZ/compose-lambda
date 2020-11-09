@@ -1,3 +1,21 @@
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+/.idea/dictionaries/zxy.xml
+
+
 # Miscellaneous
 *.class
 *.log
@@ -39,3 +57,14 @@ app.*.symbols
 
 # Obfuscation related
 app.*.map.json
+
+# Exceptions to above rules.
+!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+
+/.firebaserc
+/.metadata
+/pubspec.lock
+/firebase.json
+/.firebase/
+/ios/Podfile.lock
+/ios/build
