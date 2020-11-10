@@ -76,7 +76,7 @@ fun BuildOverviewPage() {
     val data =
         listOf(
             Pair("The guy, occupying the Oval", R.drawable.trump_dump),
-            Pair("Loser", R.drawable.trump_dump),
+            Pair("Loser or winner ?", R.drawable.trump_dump),
         )
 
     Scaffold(
