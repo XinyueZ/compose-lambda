@@ -10,6 +10,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.example.composelambda.R
@@ -41,6 +42,6 @@ fun BuildAppBar(
         } else null,
         elevation = 0.dp,
         modifier = Modifier
-            .background(color = Color(0xFF6200EE))
+            .background(color = colorResource(R.color.purple_200))
     )
 }
