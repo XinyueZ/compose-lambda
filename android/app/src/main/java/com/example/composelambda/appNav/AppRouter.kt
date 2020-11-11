@@ -1,5 +1,6 @@
 package com.example.composelambda.appNav
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -13,9 +14,7 @@ lateinit var AppNavigator: NavHostController
 
 @Composable
 fun NavigationContent(child: @Composable () -> Unit) {
-    if (!::AppNavigator.isInitialized) {
-        AppNavigator = rememberNavController()
-    }
+    AppNavigator = rememberNavController()
     child()
 }
 
@@ -23,13 +22,20 @@ fun NavigationContent(child: @Composable () -> Unit) {
 fun AppRouter() {
     NavHost(AppNavigator, startDestination = ROOT) {
         composable(ROOT) {
+//            Crossfade(AppNavigator.currentBackStackEntryAsState()) {
             BuildOverviewPage()
+//            }
         }
         composable(OVERVIEW) {
+//            Crossfade(AppNavigator.currentBackStackEntryAsState()) {
             BuildOverviewPage()
+//            }
         }
         composable(DETAIL) {
+//            Crossfade(AppNavigator.currentBackStackEntryAsState()) {
             BuildDetailPage()
+//            }
         }
     }
+
 }
