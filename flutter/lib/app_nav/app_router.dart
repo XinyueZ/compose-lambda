@@ -4,17 +4,22 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_compose_lambda/app_nav/nav_const.dart';
 import 'package:flutter_compose_lambda/pages/detail_page.dart';
 import 'package:flutter_compose_lambda/pages/overview_page.dart';
+import 'package:flutter_compose_lambda/transitions/customized_transition_route.dart';
 
 Route<dynamic> appRouter(RouteSettings settings) {
   switch (settings.name) {
     case ROOT:
     case OVERVIEW:
-      return MaterialPageRoute<void>(
+
+      ///[SlideTransitionPageRoute] or nothing to animate with [NoTransitionPageRoute]
+      return ScaleTransitionPageRoute<void>(
           settings: settings,
           builder: (BuildContext context) =>
               OverviewPage(title: "News report"));
     case DETAIL:
-      return MaterialPageRoute<void>(
+
+      ///[SlideTransitionPageRoute] or nothing to animate with [NoTransitionPageRoute]
+      return ScaleTransitionPageRoute<void>(
           settings: settings,
           builder: (BuildContext context) =>
               DetailPage(title: "The guy, occupying the Oval"));
