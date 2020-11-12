@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class DetailPage extends StatelessWidget {
-  DetailPage({
+class BookDetailsPage extends StatelessWidget {
+  BookDetailsPage({
     Key key,
     @required this.title,
-  }) : super(key: key);
+  })  : assert(title is String),
+        super(key: key);
 
   final String title;
 

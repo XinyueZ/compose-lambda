@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_compose_lambda/app_nav/nav_const.dart';
 
 class OverviewPage extends StatelessWidget {
   OverviewPage({
     Key key,
     @required this.title,
-  }) : super(key: key);
+    @required this.onSelected,
+  })  : assert(title is String),
+        assert(onSelected is VoidCallback),
+        super(key: key);
 
   final String title;
+  final VoidCallback onSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -71,12 +74,7 @@ class OverviewPage extends StatelessWidget {
       child: InkWell(
         child: content,
         onTap: () {
-          Navigator.of(
-            context,
-            rootNavigator: true,
-          ).pushNamed(
-            DETAIL,
-          );
+          onSelected();
         },
       ),
     );
