@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class NoTransitionPageRoute<T> extends MaterialPageRoute<T> {
-  NoTransitionPageRoute({
+class NoTransitionRoute<T> extends MaterialPageRoute<T> {
+  NoTransitionRoute({
     @required WidgetBuilder builder,
     RouteSettings settings,
   }) : super(
@@ -48,8 +48,8 @@ class ScaleTransitionPageRoute<T> extends MaterialPageRoute<T> {
   }
 }
 
-class SlideTransitionPageRoute<T> extends MaterialPageRoute<T> {
-  SlideTransitionPageRoute({
+class SlideTransitionTransitionRoute<T> extends MaterialPageRoute<T> {
+  SlideTransitionTransitionRoute({
     @required WidgetBuilder builder,
     RouteSettings settings,
   }) : super(

@@ -1,8 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_compose_lambda/transitions/customized_transition_route.dart';
 
-class OverviewPage extends StatelessWidget {
+class OverviewPage extends Page<dynamic> {
   OverviewPage({
+    @required LocalKey key,
+    @required this.title,
+    @required this.onSelected,
+  })  : assert(key is LocalKey),
+        assert(title is String),
+        assert(onSelected is VoidCallback),
+        super(key: key);
+
+  final String title;
+  final VoidCallback onSelected;
+
+  @override
+  Route createRoute(BuildContext context) {
+    return ScaleTransitionPageRoute<void>(
+      // settings: this,
+      builder: (BuildContext context) => OverviewPageWidget(
+        key: key,
+        title: title,
+        onSelected: onSelected,
+      ),
+    );
+  }
+}
+
+class OverviewPageWidget extends StatelessWidget {
+  OverviewPageWidget({
     Key key,
     @required this.title,
     @required this.onSelected,

@@ -1,8 +1,32 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_compose_lambda/transitions/customized_transition_route.dart';
 
-class BookDetailsPage extends StatelessWidget {
-  BookDetailsPage({
+class DetailPage extends Page<dynamic> {
+  DetailPage({
+    @required LocalKey key,
+    @required this.title,
+  })  : assert(title is String),
+        super(key: key, name: "Detail");
+
+  final String title;
+
+  @override
+  Route createRoute(BuildContext context) {
+    log("createRoute DetailPage");
+    return SlideTransitionTransitionRoute<void>(
+      builder: (BuildContext context) => DetailPageWidget(
+        key: key,
+        title: title,
+      ),
+    );
+  }
+}
+
+class DetailPageWidget extends StatelessWidget {
+  DetailPageWidget({
     Key key,
     @required this.title,
   })  : assert(title is String),
