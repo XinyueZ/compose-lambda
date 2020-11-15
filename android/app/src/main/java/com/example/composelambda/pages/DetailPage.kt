@@ -2,15 +2,14 @@ package com.example.composelambda.pages
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material.TextButton
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -20,12 +19,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 import com.example.composelambda.R
 import com.example.composelambda.appNav.AppNavigator
 
-
 @Composable
 fun BuildDetailPage() {
+
+    var delta by remember { mutableStateOf(0) }
+
     Scaffold(
         topBar = {
             BuildAppBar(
@@ -50,12 +52,34 @@ fun BuildDetailPage() {
                     contentScale = ContentScale.Crop,
                 )
                 Spacer(modifier = Modifier.preferredHeight(16.dp))
+                Row(modifier = Modifier.align(alignment = Alignment.End)) {
+                    TextButton(
+                        onClick = {
+                            if (delta > 0) delta -= 1
+                        }) {
+                        Text(
+                            "smaller", style = MaterialTheme.typography.h6.copy(
+                                textAlign = TextAlign.Center,
+                            )
+                        )
+                    }
+                    TextButton(onClick = {
+                        delta += 1
+                    }) {
+                        Text(
+                            "larger", style = MaterialTheme.typography.h6.copy(
+                                textAlign = TextAlign.Center,
+                            )
+                        )
+                    }
+                }
                 Text(
                     text = "The guy, occupying the Oval, won't leave ?",
                     modifier = Modifier.fillMaxWidth(),
                     style = MaterialTheme.typography.h5.copy(
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
+                        fontSize = (MaterialTheme.typography.h5.fontSize.value + delta).sp,
                     )
                 )
                 Spacer(modifier = Modifier.preferredHeight(16.dp))
@@ -74,7 +98,8 @@ fun BuildDetailPage() {
                     style = MaterialTheme.typography.body1
                         .copy(
                             fontFamily = FontFamily.Monospace,
-                            letterSpacing = 0.12.em
+                            letterSpacing = 0.12.em,
+                            fontSize = ( MaterialTheme.typography.body1.fontSize.value + delta).sp,
                         )
 
                 )
