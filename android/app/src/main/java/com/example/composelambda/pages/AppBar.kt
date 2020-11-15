@@ -27,6 +27,9 @@ fun BuildAppBar(
         title = {
             Text(
                 title,
+                overflow = TextOverflow.Ellipsis,
+                softWrap = false,
+                maxLines = 1,
                 modifier = Modifier
                     .background(color = Color.Transparent),
                 style = MaterialTheme.typography.h6.copy(color = Color.White)
