@@ -9,14 +9,13 @@ import com.example.composelambda.appNav.AppRouter
 import com.example.composelambda.appNav.NavigationContent
 
 class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MaterialTheme {
-                Surface(color = MaterialTheme.colors.background) {
-                    NavigationContent {
-                        AppRouter()
-                    }
+            Surface(color = MaterialTheme.colors.background) {
+                NavigationContent {
+                    AppRouter()
                 }
             }
         }

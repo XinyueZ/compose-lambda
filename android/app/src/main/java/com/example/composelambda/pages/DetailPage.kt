@@ -20,17 +20,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
-import androidx.ui.tooling.preview.Preview
 import com.example.composelambda.R
 import com.example.composelambda.appNav.AppNavigator
 
 
-@Preview
 @Composable
 fun BuildDetailPage() {
     Scaffold(
         topBar = {
-            BuildAppBar("The guy, occupying the Oval") {
+            BuildAppBar(
+                "The guy, occupying the Oval"
+            ) {
                 AppNavigator.popBackStack()
             }
         },

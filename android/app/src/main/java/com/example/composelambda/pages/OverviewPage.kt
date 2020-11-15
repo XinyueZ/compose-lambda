@@ -17,11 +17,9 @@ import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.navigate
-import androidx.ui.tooling.preview.Preview
 import com.example.composelambda.R
 import com.example.composelambda.appNav.AppNavigator
 
-@Preview
 @Composable
 fun BuildOverviewPage() {
     val data =
@@ -32,7 +30,9 @@ fun BuildOverviewPage() {
 
     Scaffold(
         topBar = {
-            BuildAppBar(title = "News report")
+            BuildAppBar(
+                title = "News report"
+            )
         },
         bodyContent = {
             LazyColumnFor(
