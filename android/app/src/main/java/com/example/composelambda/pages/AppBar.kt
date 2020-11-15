@@ -2,22 +2,21 @@ package com.example.composelambda.pages
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import androidx.ui.tooling.preview.Preview
 import com.example.composelambda.R
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 
-@Preview
 @Composable
 fun BuildAppBar(
     title: String,
@@ -43,7 +42,22 @@ fun BuildAppBar(
             }
         } else null,
         elevation = 0.dp,
+        actions = {
+            BuildSwitchTheme()
+        },
         modifier = Modifier
             .background(color = colorResource(R.color.purple_200))
     )
+}
+
+@Composable
+fun BuildSwitchTheme() {
+    var isDarkTheme by remember { mutableStateOf(false) }
+    Row() {
+        Text(if (isDarkTheme) "Dark" else "Light")
+        Spacer(modifier = Modifier.preferredWidth(10.dp))
+        Switch(checked = isDarkTheme, onCheckedChange = {
+            isDarkTheme = it
+        })
+    }
 }
