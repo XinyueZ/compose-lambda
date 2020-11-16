@@ -2,6 +2,8 @@ package com.example.composelambda.appNav
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,14 +22,14 @@ fun NavigationContent(child: @Composable () -> Unit) {
     child()
 }
 
-@Composable
-fun <T> WithThemeCrossfade(
-    current: T,
-    child: @Composable (() -> Unit),
+
+fun NavGraphBuilder.withThemeComposable(
+    route: String,
+    child: @Composable ((NavBackStackEntry) -> Unit)
 ) {
-    Crossfade(current) {
+    composable(route) {
         AppTheme {
-            child()
+            child(it)
         }
     }
 }
@@ -35,18 +37,18 @@ fun <T> WithThemeCrossfade(
 @Composable
 fun AppRouter() {
     NavHost(AppNavigator, startDestination = ROOT) {
-        composable(ROOT) {
-            WithThemeCrossfade(AppNavigator.currentBackStackEntryAsState()) {
+        withThemeComposable(ROOT) {
+            Crossfade(AppNavigator.currentBackStackEntryAsState()) {
                 BuildOverviewPage()
             }
         }
-        composable(OVERVIEW) {
-            WithThemeCrossfade(AppNavigator.currentBackStackEntryAsState()) {
+        withThemeComposable(OVERVIEW) {
+            Crossfade(AppNavigator.currentBackStackEntryAsState()) {
                 BuildOverviewPage()
             }
         }
-        composable(DETAIL) {
-            WithThemeCrossfade(AppNavigator.currentBackStackEntryAsState()) {
+        withThemeComposable(DETAIL) {
+            Crossfade(AppNavigator.currentBackStackEntryAsState()) {
                 BuildDetailPage()
             }
         }
