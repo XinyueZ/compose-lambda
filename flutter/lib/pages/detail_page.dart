@@ -1,13 +1,22 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class DetailPage extends StatelessWidget {
+class DetailPage extends StatefulWidget {
   DetailPage({
     Key key,
     @required this.title,
   }) : super(key: key);
 
   final String title;
+
+  @override
+  _DetailPageState createState() => _DetailPageState();
+}
+
+class _DetailPageState extends State<DetailPage> {
+  double _delta = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +30,10 @@ class DetailPage extends StatelessWidget {
     return AppBar(
       backgroundColor: Colors.purple,
       title: Text(
-        title,
+        widget.title,
+        maxLines: 1,
+        softWrap: false,
+        overflow: TextOverflow.clip,
         style: Theme.of(context).textTheme.headline6.copyWith(
               color: Colors.white,
             ),
@@ -47,10 +59,43 @@ class DetailPage extends StatelessWidget {
             const SizedBox(
               height: 16,
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                TextButton(
+                    onPressed: () {
+                      if (_delta > 0) {
+                        setState(() {
+                          _delta -= 1;
+                        });
+                      }
+                    },
+                    child: Text(
+                      "smaller",
+                      textAlign: TextAlign.center,
+                    )),
+                TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _delta += 1;
+                      });
+                    },
+                    child: Text(
+                      "larger",
+                      textAlign: TextAlign.center,
+                    )),
+              ],
+            ),
+            const SizedBox(
+              height: 16,
+            ),
             Text(
               "The guy, occupying the Oval, won't leave ?",
+              textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.headline5.copyWith(
                     fontWeight: FontWeight.bold,
+                    fontSize:
+                        Theme.of(context).textTheme.headline5.fontSize + _delta,
                   ),
             ),
             const SizedBox(
@@ -71,6 +116,8 @@ class DetailPage extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyText1.copyWith(
                     fontFamily: "monospace",
                     letterSpacing: 1.2,
+                    fontSize:
+                        Theme.of(context).textTheme.bodyText1.fontSize + _delta,
                   ),
             ),
             const SizedBox(
