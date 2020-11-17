@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Surface(color = MaterialTheme.colors.background) {
+            Surface(color = MaterialTheme.colors.surface) {
                 NavigationContent {
                     AppRouter()
                 }
