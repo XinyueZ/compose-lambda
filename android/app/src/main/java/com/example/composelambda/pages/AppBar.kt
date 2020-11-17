@@ -32,7 +32,7 @@ fun BuildAppBar(
                 maxLines = 1,
                 modifier = Modifier
                     .background(color = Color.Transparent),
-                style = MaterialTheme.typography.h6.copy(color = Color.White)
+                style = MaterialTheme.typography.h6
             )
         },
         navigationIcon = if (backNavigateTo != null) {
