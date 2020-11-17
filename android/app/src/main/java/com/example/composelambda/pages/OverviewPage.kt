@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.navigate
 import com.example.composelambda.R
 import com.example.composelambda.appNav.AppNavigator
+import com.example.composelambda.appNav.DETAIL
 
 @Composable
 fun BuildOverviewPage() {
@@ -56,7 +57,7 @@ fun BuildOverviewCard(content: @Composable () -> Unit) {
         modifier = Modifier
             .padding(top = 5.dp, bottom = 5.dp)
             .clickable(enabled = true) {
-                AppNavigator.navigate("detail")
+                AppNavigator.navigate(DETAIL)
             },
         content = content,
     )

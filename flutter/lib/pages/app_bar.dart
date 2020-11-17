@@ -11,33 +11,37 @@ class TopAppBar extends AppBar {
               title,
               maxLines: 1,
               softWrap: false,
-              overflow: TextOverflow.clip,
+              overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.headline6,
             ),
             actions: <Widget>[
-              Row(
-                children: <Widget>[
-                  Switch(
-                    value: Provider.of<AppThemeModel>(
-                      context,
-                      listen: true,
-                    ).isDark,
-                    onChanged: (final bool value) {
-                      Provider.of<AppThemeModel>(
-                        context,
-                        listen: false,
-                      ).onThemeChanged(
-                        isDarkTheme: value,
-                      );
-                    },
-                  ),
-                  Text(Provider.of<AppThemeModel>(
-                    context,
-                    listen: true,
-                  ).isDark
-                      ? "Dark"
-                      : "Light")
-                ],
-              ),
+              _buildSwitchTheme(context),
             ]);
+
+  static Widget _buildSwitchTheme(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Switch(
+          value: Provider.of<AppThemeModel>(
+            context,
+            listen: true,
+          ).isDark,
+          onChanged: (final bool value) {
+            Provider.of<AppThemeModel>(
+              context,
+              listen: false,
+            ).onThemeChanged(
+              isDarkTheme: value,
+            );
+          },
+        ),
+        Text(Provider.of<AppThemeModel>(
+          context,
+          listen: true,
+        ).isDark
+            ? "Dark"
+            : "Light")
+      ],
+    );
+  }
 }
