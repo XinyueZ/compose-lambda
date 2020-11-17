@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_compose_lambda/pages/app_bar.dart';
 
 class DetailPage extends StatefulWidget {
   DetailPage({
@@ -21,23 +22,11 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(context),
-      body: _buildBody(context),
-    );
-  }
-
-  PreferredSizeWidget _buildAppBar(BuildContext context) {
-    return AppBar(
-      backgroundColor: Colors.purple,
-      title: Text(
-        widget.title,
-        maxLines: 1,
-        softWrap: false,
-        overflow: TextOverflow.clip,
-        style: Theme.of(context).textTheme.headline6.copyWith(
-              color: Colors.white,
-            ),
+      appBar: TopAppBar(
+        context: context,
+        title: widget.title,
       ),
+      body: _buildBody(context),
     );
   }
 

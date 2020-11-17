@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_compose_lambda/app_nav/nav_const.dart';
+import 'package:flutter_compose_lambda/pages/app_bar.dart';
 
 class OverviewPage extends StatelessWidget {
   OverviewPage({
@@ -13,20 +14,11 @@ class OverviewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(context),
-      body: _buildBody(context),
-    );
-  }
-
-  PreferredSizeWidget _buildAppBar(BuildContext context) {
-    return AppBar(
-      backgroundColor: Colors.purple,
-      title: Text(
-        title,
-        style: Theme.of(context).textTheme.headline6.copyWith(
-              color: Colors.white,
-            ),
+      appBar: TopAppBar(
+        context: context,
+        title: title,
       ),
+      body: _buildBody(context),
     );
   }
 
@@ -37,15 +29,11 @@ class OverviewPage extends StatelessWidget {
     ];
 
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: ListView.separated(
         separatorBuilder: (BuildContext context, int index) => const Divider(
-          height: 12.0,
+          height: 3.0,
           color: Colors.transparent,
-        ),
-        padding: const EdgeInsets.only(
-          left: 5,
-          right: 5,
         ),
         itemCount: data.length,
         itemBuilder: (BuildContext context, int index) {
@@ -67,7 +55,7 @@ class OverviewPage extends StatelessWidget {
   ) {
     return Card(
       color: Theme.of(context).cardTheme.color,
-      elevation: 5,
+      elevation: 4,
       child: InkWell(
         child: content,
         onTap: () {
