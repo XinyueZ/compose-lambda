@@ -40,7 +40,8 @@ class TopAppBar extends AppBar {
           listen: true,
         ).isDark
             ? "Dark"
-            : "Light")
+            : "Light"),
+        const SizedBox(width: 16),
       ],
     );
   }
