@@ -1,5 +1,6 @@
 package com.example.composelambda
 
+import android.app.Application
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
@@ -7,17 +8,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.viewinterop.viewModel
-import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
+import javax.inject.Singleton
 
 
 @Composable
 fun AppTheme(
     child: @Composable (() -> Unit),
 ) {
-    val appThemeModel: AppThemeModel = viewModel()
+    val appThemeModel: AppThemeModel = viewModel(factory = AppThemeModelFactory)
     when (appThemeModel.isDark) {
         true -> AppDarkTheme {
             child()
@@ -69,9 +77,21 @@ fun AppDarkTheme(child: @Composable (() -> Unit)) {
     }
 }
 
-class AppThemeModel(savedStateHandle: SavedStateHandle) : ViewModel() {
 
-    var isDark: Boolean by mutableStateOf(  savedStateHandle["isDark"] ?: false )
+object AppThemeModelFactory : ViewModelProvider.Factory {
+    private lateinit var appThemeModel: AppThemeModel
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        if (this::appThemeModel.isInitialized) return appThemeModel as T
+        appThemeModel = AppThemeModel()
+        return appThemeModel as T
+    }
+}
+
+class AppThemeModel : ViewModel() {
+
+    var isDark: Boolean by mutableStateOf(false)
         private set
 
     fun onThemeChanged(isDarkTheme: Boolean) {

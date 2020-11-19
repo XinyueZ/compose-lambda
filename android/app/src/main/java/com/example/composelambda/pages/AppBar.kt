@@ -15,6 +15,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.viewModel
 import com.example.composelambda.AppThemeModel
+import com.example.composelambda.AppThemeModelFactory
 import com.example.composelambda.R
 
 
@@ -55,7 +56,7 @@ fun BuildAppBar(
 
 @Composable
 fun BuildSwitchTheme() {
-    val appThemeModel: AppThemeModel = viewModel()
+    val appThemeModel: AppThemeModel = viewModel(factory = AppThemeModelFactory)
     Row() {
         Switch(checked = appThemeModel.isDark, onCheckedChange = {
             appThemeModel.onThemeChanged(it)
