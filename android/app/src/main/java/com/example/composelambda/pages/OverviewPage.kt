@@ -16,13 +16,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.navigate
 import com.example.composelambda.R
-import com.example.composelambda.appNav.AppNavigator
-import com.example.composelambda.appNav.DETAIL
+import com.example.composelambda.appNav.Actions
 
 @Composable
-fun BuildOverviewPage() {
+fun BuildOverviewPage(actions: Actions) {
     val data =
         listOf(
             Pair("The guy, occupying the Oval", R.drawable.trump_dump),
@@ -40,7 +38,7 @@ fun BuildOverviewPage() {
                 data,
                 contentPadding = PaddingValues(8.dp),
             ) { item ->
-                BuildOverviewCard {
+                BuildOverviewCard(actions) {
                     BuildOverviewCardContent(item)
                 }
             }
@@ -49,7 +47,7 @@ fun BuildOverviewPage() {
 }
 
 @Composable
-fun BuildOverviewCard(content: @Composable () -> Unit) {
+fun BuildOverviewCard(actions: Actions, content: @Composable () -> Unit) {
     Card(
         elevation = 5.dp,
         shape = RoundedCornerShape(8.dp),
@@ -57,7 +55,7 @@ fun BuildOverviewCard(content: @Composable () -> Unit) {
         modifier = Modifier
             .padding(top = 5.dp, bottom = 5.dp)
             .clickable(enabled = true) {
-                AppNavigator.navigate(DETAIL)
+                actions.selectNews()
             },
         content = content,
     )
