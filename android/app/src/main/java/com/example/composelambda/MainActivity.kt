@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.platform.setContent
-import com.example.composelambda.appNav.AppRouter
+import com.example.composelambda.appNav.AppContent
 import com.example.composelambda.appNav.NavigationContent
 
 class MainActivity : AppCompatActivity() {
@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         setContent {
             Surface(color = MaterialTheme.colors.surface) {
                 NavigationContent {
-                    AppRouter()
+                    AppContent()
                 }
             }
         }

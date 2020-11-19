@@ -35,7 +35,7 @@ fun NavGraphBuilder.withThemeComposable(
 }
 
 @Composable
-fun AppRouter() {
+fun AppContent() {
     NavHost(AppNavigator, startDestination = ROOT) {
         withThemeComposable(ROOT) {
             Crossfade(AppNavigator.currentBackStackEntryAsState()) {
