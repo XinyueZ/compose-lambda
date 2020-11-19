@@ -14,8 +14,7 @@ import com.example.composelambda.pages.BuildOverviewPage
 fun NavigationContent() {
     val navCtrl = rememberNavController()
     Crossfade(navCtrl.currentBackStackEntryAsState()) {
-        NavHost(navCtrl, startDestination = ROOT) {
-            composable(ROOT) { BuildOverviewPage(Actions(navCtrl)) }
+        NavHost(navCtrl, startDestination = OVERVIEW) {
             composable(OVERVIEW) { BuildOverviewPage(Actions(navCtrl)) }
             composable(DETAIL) { BuildDetailPage(Actions(navCtrl)) }
         }
