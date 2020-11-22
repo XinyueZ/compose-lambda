@@ -76,10 +76,12 @@ class OverviewPage extends StatelessWidget {
   ) {
     return Row(
       children: <Widget>[
-        Image.asset(
-          entry.value,
-          width: 120,
-          height: 90,
+        ClipRRect(
+          borderRadius: BorderRadius.circular(8.0),
+          child: Image.asset(
+            entry.value,
+            width: 120,
+          ),
         ),
         const SizedBox(width: 16),
         Text(
