@@ -14,10 +14,19 @@
  * limitations under the License.
  */
 
-package com.example.composelambda
+package com.example.composelambda.domains
 
-import android.app.Application
-import dagger.hilt.android.HiltAndroidApp
-
-@HiltAndroidApp
-class ComposeApp : Application()
+data class BreakingNews(
+    val title: String,
+    val description: String,
+    val image: String
+) {
+    companion object {
+        @JvmStatic
+        val EchoBreakingNews = BreakingNews(
+            "Breaking News",
+            "Hi, this is the breaking news",
+            "https://dl.dropboxusercontent.com/s/4o1nq8pdtuv5vf6/Screenshot%202020-11-22%20at%2015.43.54.png"
+        )
+    }
+}

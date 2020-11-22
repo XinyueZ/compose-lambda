@@ -14,10 +14,16 @@
  * limitations under the License.
  */
 
-package com.example.composelambda
+package com.example.composelambda.repositories
 
-import android.app.Application
-import dagger.hilt.android.HiltAndroidApp
+import com.example.composelambda.domains.BreakingNews
+import com.example.composelambda.domains.BreakingNews.Companion.EchoBreakingNews
+import javax.inject.Inject
 
-@HiltAndroidApp
-class ComposeApp : Application()
+interface BreakingNewsRepository {
+    fun echo(): BreakingNews
+}
+
+class BreakingNewsRepositoryImpl @Inject constructor() : BreakingNewsRepository {
+    override fun echo(): BreakingNews = EchoBreakingNews
+}

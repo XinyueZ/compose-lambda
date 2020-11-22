@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 
-package com.example.composelambda
+package com.example.composelambda.pages.viewmodels
 
-import android.app.Application
-import dagger.hilt.android.HiltAndroidApp
+import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.ViewModel
+import com.example.composelambda.domains.BreakingNews
+import com.example.composelambda.repositories.BreakingNewsRepository
 
-@HiltAndroidApp
-class ComposeApp : Application()
+class BreakingNewsViewModel @ViewModelInject constructor(
+    private val repository: BreakingNewsRepository
+) : ViewModel() {
+    fun echo(): BreakingNews = repository.echo()
+}
