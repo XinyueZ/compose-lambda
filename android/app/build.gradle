@@ -35,6 +35,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
         allWarningsAsErrors = true
+//        useIR = true
     }
 
     buildFeatures {
@@ -44,6 +45,11 @@ android {
     composeOptions {
         kotlinCompilerVersion kotlin_version
         kotlinCompilerExtensionVersion compose_version
+    }
+
+    packagingOptions {
+        excludes += "/META-INF/AL2.0"
+        excludes += "/META-INF/LGPL2.1"
     }
 }
 
@@ -59,7 +65,6 @@ dependencies {
     implementation "androidx.compose.animation:animation:$compose_version"
     implementation "androidx.ui:ui-tooling:$compose_version"
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
-    implementation "androidx.compose.animation:animation:$compose_version"
     implementation "androidx.navigation:navigation-compose:1.0.0-alpha02"
 
     implementation 'androidx.appcompat:appcompat:1.3.0-alpha02'
@@ -79,7 +84,10 @@ dependencies {
 
 
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
+    implementation 'com.google.code.gson:gson:2.8.6'
+
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0'
 
     androidTestImplementation 'junit:junit:4.13.1'

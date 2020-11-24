@@ -18,12 +18,26 @@ package com.example.composelambda.repositories
 
 import com.example.composelambda.domains.BreakingNews
 import com.example.composelambda.domains.BreakingNews.Companion.EchoBreakingNews
+import com.example.composelambda.network.NewsService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import retrofit2.await
 import javax.inject.Inject
 
 interface BreakingNewsRepository {
     fun echo(): BreakingNews
+    fun fetchBreakingNews(): Flow<BreakingNews>
 }
 
-class BreakingNewsRepositoryImpl @Inject constructor() : BreakingNewsRepository {
+class BreakingNewsRepositoryImpl @Inject constructor(private val newsService: NewsService) :
+    BreakingNewsRepository {
     override fun echo(): BreakingNews = EchoBreakingNews
+
+    override fun fetchBreakingNews(): Flow<BreakingNews> {
+        return flow {
+                emit( newsService.getBreakingNews().await())
+        }.flowOn(Dispatchers.IO) // Use the IO thread for this Flow
+    }
 }

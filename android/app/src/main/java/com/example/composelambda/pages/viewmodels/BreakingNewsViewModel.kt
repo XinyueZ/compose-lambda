@@ -24,5 +24,8 @@ import com.example.composelambda.repositories.BreakingNewsRepository
 class BreakingNewsViewModel @ViewModelInject constructor(
     private val repository: BreakingNewsRepository
 ) : ViewModel() {
+    var breakingNews = repository.fetchBreakingNews()
+        private set
+
     fun echo(): BreakingNews = repository.echo()
 }

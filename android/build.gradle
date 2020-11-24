@@ -18,7 +18,7 @@ buildscript {
     ext.kotlin_version = '1.4.10'
     ext.hilt_version = '2.29.1-alpha'
     ext.hilt_co_version = '1.0.0-alpha02'
-    ext.compose_version = '1.0.0-alpha07'
+    ext.compose_version = '1.0.0-SNAPSHOT'
 
     repositories {
         google()
@@ -32,13 +32,16 @@ buildscript {
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
     }
 }
-
 plugins {
     id 'com.diffplug.spotless' version '5.7.0'
 }
 
 subprojects {
     repositories {
+        maven {
+            def snapshot = "6961312"
+            url  "https://androidx.dev/snapshots/builds/$snapshot/artifacts/repository/"
+        }
         google()
         jcenter()
     }
