@@ -52,7 +52,7 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 @Suppress("UNCHECKED_CAST")
 @Composable
 fun BuildOverviewPage(breakingNewsViewModel: BreakingNewsViewModel, actions: Actions) {
-    val breakingNews: BreakingNews by breakingNewsViewModel.breakingNews.collectAsState(BreakingNews.EchoBreakingNews)
+    val breakingNews: BreakingNews by breakingNewsViewModel.breakingNews.collectAsState(BreakingNews.default)
     val data =
         listOf(
             breakingNews,

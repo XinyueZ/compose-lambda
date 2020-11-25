@@ -25,7 +25,7 @@ data class BreakingNews(
 ) {
     companion object {
         @JvmStatic
-        val EchoBreakingNews = BreakingNews(
+        val default = BreakingNews(
             "Breaking News",
             "Hi, this is the breaking news",
             "https://dl.dropboxusercontent.com/s/4o1nq8pdtuv5vf6/Screenshot%202020-11-22%20at%2015.43.54.png"

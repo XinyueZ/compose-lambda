@@ -17,7 +17,7 @@
 package com.example.composelambda.repositories
 
 import com.example.composelambda.domains.BreakingNews
-import com.example.composelambda.domains.BreakingNews.Companion.EchoBreakingNews
+import com.example.composelambda.domains.BreakingNews.Companion.default
 import com.example.composelambda.network.NewsService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -32,7 +32,7 @@ interface BreakingNewsRepository {
 
 class BreakingNewsRepositoryImpl @Inject constructor(private val newsService: NewsService) :
     BreakingNewsRepository {
-    override fun echo(): BreakingNews = EchoBreakingNews
+    override fun echo(): BreakingNews = default
 
     override fun fetchBreakingNews(): Flow<BreakingNews> {
         return flow {
