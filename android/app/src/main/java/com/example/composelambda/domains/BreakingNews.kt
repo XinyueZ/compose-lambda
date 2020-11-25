@@ -30,5 +30,12 @@ data class BreakingNews(
             "Hi, this is the breaking news",
             "https://dl.dropboxusercontent.com/s/4o1nq8pdtuv5vf6/Screenshot%202020-11-22%20at%2015.43.54.png"
         )
+
+        @JvmStatic
+        val error = BreakingNews(
+            "",
+            "",
+            ""
+        )
     }
 }

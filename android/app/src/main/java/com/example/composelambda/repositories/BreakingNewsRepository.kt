@@ -23,6 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import java.lang.System.currentTimeMillis
 import javax.inject.Inject
 
 interface BreakingNewsRepository {
@@ -36,7 +37,11 @@ class BreakingNewsRepositoryImpl @Inject constructor(private val newsService: Ne
 
     override fun fetchBreakingNews(): Flow<BreakingNews> {
         return flow {
-            emit(newsService.getBreakingNews())
+            if (currentTimeMillis() % 2 == 0) {
+                emit(newsService.getBreakingNews())
+            } else {
+                emit(BreakingNews.error)
+            }
         }.flowOn(Dispatchers.IO) // Use the IO thread for this Flow
     }
 }

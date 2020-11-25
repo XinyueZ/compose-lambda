@@ -20,12 +20,19 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import com.example.composelambda.domains.BreakingNews
 import com.example.composelambda.repositories.BreakingNewsRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onStart
 
 class BreakingNewsViewModel @ViewModelInject constructor(
     private val repository: BreakingNewsRepository
 ) : ViewModel() {
-    var breakingNews = repository.fetchBreakingNews()
-        private set
+    @ExperimentalCoroutinesApi
+    val breakingNews = repository.fetchBreakingNews().onStart {
+        emit(BreakingNews.default)
+    }.catch {
+        emit(BreakingNews.error)
+    }
 
     fun echo(): BreakingNews = repository.echo()
 }

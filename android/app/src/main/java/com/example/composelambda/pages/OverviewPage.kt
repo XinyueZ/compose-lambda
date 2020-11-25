@@ -41,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.composelambda.R
@@ -48,7 +49,9 @@ import com.example.composelambda.appNav.Actions
 import com.example.composelambda.domains.BreakingNews
 import com.example.composelambda.pages.viewmodels.BreakingNewsViewModel
 import dev.chrisbanes.accompanist.coil.CoilImage
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@ExperimentalCoroutinesApi
 @Suppress("UNCHECKED_CAST")
 @Composable
 fun BuildOverviewPage(breakingNewsViewModel: BreakingNewsViewModel, actions: Actions) {
@@ -127,22 +130,37 @@ fun BuildBreakingNewsContent(breakingNews: BreakingNews) {
         modifier = Modifier
             .background(MaterialTheme.colors.error)
     ) {
-        CoilImage(
-            data = breakingNews.image,
-            modifier = Modifier
-                .width(120.dp)
-                .clip(shape = RoundedCornerShape(8.dp)),
-        )
-        Spacer(modifier = Modifier.preferredWidth(16.dp))
-        Text(
-            text = breakingNews.title,
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.CenterVertically),
-            style = MaterialTheme.typography.subtitle1.copy(
-                textAlign = TextAlign.Left,
-                color = Color.White
+        if (breakingNews == BreakingNews.error) {
+            Spacer(modifier = Modifier.preferredWidth(16.dp))
+            Text(
+                text = "Error while loading breaking-news",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterVertically),
+                style = MaterialTheme.typography.subtitle1.copy(
+                    textAlign = TextAlign.Left,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
             )
-        )
+        } else {
+            CoilImage(
+                data = breakingNews.image,
+                modifier = Modifier
+                    .width(120.dp)
+                    .clip(shape = RoundedCornerShape(8.dp)),
+            )
+            Spacer(modifier = Modifier.preferredWidth(16.dp))
+            Text(
+                text = breakingNews.title,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterVertically),
+                style = MaterialTheme.typography.subtitle1.copy(
+                    textAlign = TextAlign.Left,
+                    color = Color.White
+                )
+            )
+        }
     }
 }
