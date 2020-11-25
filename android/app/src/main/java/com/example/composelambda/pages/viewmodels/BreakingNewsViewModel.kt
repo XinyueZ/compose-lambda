@@ -18,20 +18,25 @@ package com.example.composelambda.pages.viewmodels
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
+import com.example.composelambda.async.OnResult
+import com.example.composelambda.async.OnResult.OnError
+import com.example.composelambda.async.OnResult.OnWaiting
 import com.example.composelambda.domains.BreakingNews
 import com.example.composelambda.repositories.BreakingNewsRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 
 class BreakingNewsViewModel @ViewModelInject constructor(
     private val repository: BreakingNewsRepository
 ) : ViewModel() {
-    @ExperimentalCoroutinesApi
-    val breakingNews = repository.fetchBreakingNews().onStart {
-        emit(BreakingNews.default)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val breakingNewsState: Flow<OnResult<BreakingNews>> = repository.fetchBreakingNews().onStart {
+        emit(OnWaiting(null))
     }.catch {
-        emit(BreakingNews.error)
+        emit(OnError(it, BreakingNews.empty))
     }
 
     fun echo(): BreakingNews = repository.echo()

@@ -16,6 +16,9 @@
 
 package com.example.composelambda.repositories
 
+import com.example.composelambda.async.OnResult
+import com.example.composelambda.async.onError
+import com.example.composelambda.async.onSuccess
 import com.example.composelambda.domains.BreakingNews
 import com.example.composelambda.domains.BreakingNews.Companion.default
 import com.example.composelambda.network.NewsService
@@ -28,19 +31,28 @@ import javax.inject.Inject
 
 interface BreakingNewsRepository {
     fun echo(): BreakingNews
-    fun fetchBreakingNews(): Flow<BreakingNews>
+    fun fetchBreakingNews(): Flow<OnResult<BreakingNews>>
 }
 
 class BreakingNewsRepositoryImpl @Inject constructor(private val newsService: NewsService) :
     BreakingNewsRepository {
     override fun echo(): BreakingNews = default
 
-    override fun fetchBreakingNews(): Flow<BreakingNews> {
+    override fun fetchBreakingNews(): Flow<OnResult<BreakingNews>> {
         return flow {
-            if (currentTimeMillis() % 2 == 0) {
-                emit(newsService.getBreakingNews())
-            } else {
-                emit(BreakingNews.error)
+            when {
+                currentTimeMillis() % 3 == 0 -> {
+                    // Some logic errors to cause exception
+                    emit(IllegalArgumentException("Cannot fetch data.").onError(BreakingNews.empty))
+                }
+                currentTimeMillis() % 5 == 0 -> {
+                    // Some internal fatal errors
+                    throw IllegalArgumentException("Fatal issue!")
+                }
+                else -> {
+                    // Give the response wrapper out
+                    emit(newsService.getBreakingNews().onSuccess())
+                }
             }
         }.flowOn(Dispatchers.IO) // Use the IO thread for this Flow
     }

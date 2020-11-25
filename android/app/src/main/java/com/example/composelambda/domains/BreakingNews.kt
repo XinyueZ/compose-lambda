@@ -32,7 +32,7 @@ data class BreakingNews(
         )
 
         @JvmStatic
-        val error = BreakingNews(
+        val empty = BreakingNews(
             "",
             "",
             ""

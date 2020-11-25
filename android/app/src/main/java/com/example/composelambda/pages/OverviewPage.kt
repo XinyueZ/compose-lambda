@@ -19,6 +19,7 @@ package com.example.composelambda.pages
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,10 +27,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.preferredWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumnForIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -46,19 +49,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.composelambda.R
 import com.example.composelambda.appNav.Actions
+import com.example.composelambda.async.OnResult
+import com.example.composelambda.async.OnResult.OnError
+import com.example.composelambda.async.OnResult.OnInit
+import com.example.composelambda.async.OnResult.OnSuccess
 import com.example.composelambda.domains.BreakingNews
 import com.example.composelambda.pages.viewmodels.BreakingNewsViewModel
 import dev.chrisbanes.accompanist.coil.CoilImage
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-@ExperimentalCoroutinesApi
 @Suppress("UNCHECKED_CAST")
 @Composable
 fun BuildOverviewPage(breakingNewsViewModel: BreakingNewsViewModel, actions: Actions) {
-    val breakingNews: BreakingNews by breakingNewsViewModel.breakingNews.collectAsState(BreakingNews.default)
+    val breakingNewsState: OnResult<BreakingNews> by breakingNewsViewModel.breakingNewsState.collectAsState(
+        initial = OnInit()
+    )
     val data =
         listOf(
-            breakingNews,
+            breakingNewsState,
             Pair("The guy, occupying the Oval", R.drawable.trump_dump),
             Pair("Loser or winner ?", R.drawable.trump_dump),
         )
@@ -76,7 +83,7 @@ fun BuildOverviewPage(breakingNewsViewModel: BreakingNewsViewModel, actions: Act
             ) { index, item ->
                 BuildOverviewCard(actions) {
                     if (index == 0) {
-                        BuildBreakingNewsContent(item as BreakingNews)
+                        BuildBreakingNewsContent(item as OnResult<BreakingNews>)
                     } else {
                         BuildOverviewCardContent(item as Pair<String, Int>)
                     }
@@ -93,6 +100,7 @@ fun BuildOverviewCard(actions: Actions, content: @Composable () -> Unit) {
         shape = RoundedCornerShape(8.dp),
         backgroundColor = MaterialTheme.colors.surface,
         modifier = Modifier
+            .fillMaxWidth()
             .padding(top = 5.dp, bottom = 5.dp)
             .clickable(enabled = true) {
                 actions.selectNews()
@@ -125,42 +133,55 @@ fun BuildOverviewCardContent(item: Pair<String, Int>) {
 }
 
 @Composable
-fun BuildBreakingNewsContent(breakingNews: BreakingNews) {
+fun BuildBreakingNewsContent(state: OnResult<BreakingNews>) {
     Row(
         modifier = Modifier
             .background(MaterialTheme.colors.error)
     ) {
-        if (breakingNews == BreakingNews.error) {
-            Spacer(modifier = Modifier.preferredWidth(16.dp))
-            Text(
-                text = "Error while loading breaking-news",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.CenterVertically),
-                style = MaterialTheme.typography.subtitle1.copy(
-                    textAlign = TextAlign.Left,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
+        when (state) {
+            is OnSuccess -> {
+                CoilImage(
+                    data = state.data.image,
+                    modifier = Modifier
+                        .width(120.dp)
+                        .clip(shape = RoundedCornerShape(8.dp)),
                 )
-            )
-        } else {
-            CoilImage(
-                data = breakingNews.image,
-                modifier = Modifier
-                    .width(120.dp)
-                    .clip(shape = RoundedCornerShape(8.dp)),
-            )
-            Spacer(modifier = Modifier.preferredWidth(16.dp))
-            Text(
-                text = breakingNews.title,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.CenterVertically),
-                style = MaterialTheme.typography.subtitle1.copy(
-                    textAlign = TextAlign.Left,
-                    color = Color.White
+                Spacer(modifier = Modifier.preferredWidth(16.dp))
+                Text(
+                    text = state.data.title,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.CenterVertically),
+                    style = MaterialTheme.typography.subtitle1.copy(
+                        textAlign = TextAlign.Left,
+                        color = Color.White
+                    )
                 )
-            )
+            }
+            is OnError -> {
+                Spacer(modifier = Modifier.preferredWidth(16.dp))
+                Text(
+                    text = "${state.exception.message}",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.CenterVertically),
+                    style = MaterialTheme.typography.subtitle1.copy(
+                        textAlign = TextAlign.Left,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                )
+            }
+            else -> {
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    CircularProgressIndicator(
+                        strokeWidth = 1.5.dp,
+                        modifier = Modifier.size(
+                            50.dp
+                        ).align(Alignment.Center).padding(10.dp),
+                    )
+                }
+            }
         }
     }
 }
