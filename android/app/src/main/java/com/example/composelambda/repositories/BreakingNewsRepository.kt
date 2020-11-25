@@ -23,7 +23,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import retrofit2.await
 import javax.inject.Inject
 
 interface BreakingNewsRepository {
@@ -37,7 +36,7 @@ class BreakingNewsRepositoryImpl @Inject constructor(private val newsService: Ne
 
     override fun fetchBreakingNews(): Flow<BreakingNews> {
         return flow {
-                emit( newsService.getBreakingNews().await())
+            emit(newsService.getBreakingNews())
         }.flowOn(Dispatchers.IO) // Use the IO thread for this Flow
     }
 }

@@ -15,9 +15,9 @@
  */
 
 package com.example.composelambda.domains
-//import kotlinx.serialization.Serializable
+// import kotlinx.serialization.Serializable
 
-//@Serializable
+// @Serializable
 data class BreakingNews(
     val title: String,
     val description: String,
