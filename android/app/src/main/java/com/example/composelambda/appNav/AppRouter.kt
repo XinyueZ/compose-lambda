@@ -16,7 +16,6 @@
 
 package com.example.composelambda.appNav
 
-import android.util.Log
 import androidx.compose.animation.Crossfade
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.onCommit
@@ -26,35 +25,30 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.composelambda.Logger
 import com.example.composelambda.pages.BuildDetailPage
 import com.example.composelambda.pages.BuildOverviewPage
 import com.example.composelambda.pages.viewmodels.BreakingNewsViewModel
 
 @Composable
-fun NavigationHost(child: @Composable ((navCtrl: NavHostController) -> Unit)) {
+fun NavigationContent(breakingNewsViewModel: BreakingNewsViewModel) {
+    val navCtrl: NavHostController = rememberNavController()
     onCommit {
-        Log.d("debug compose", "Navigation-Host onCommit")
-    }
-    val navCtrl = rememberNavController()
-    child(navCtrl)
-    onDispose {
-        Log.d("debug compose", "Navigation-Host onDispose")
-    }
-}
-
-@Composable
-fun NavigationContent(navCtrl: NavHostController, breakingNewsViewModel: BreakingNewsViewModel) {
-    onCommit {
-        Log.d("debug compose", "Navigation-Content onCommit")
+        Logger("Navigation-Content onCommit")
     }
     Crossfade(navCtrl.currentBackStackEntryAsState()) {
         NavHost(navCtrl, startDestination = OVERVIEW) {
-            composable(OVERVIEW) { BuildOverviewPage(breakingNewsViewModel, Actions(navCtrl)) }
-            composable(DETAIL) { BuildDetailPage(Actions(navCtrl)) }
+            composable(OVERVIEW) {
+                Logger("OVERVIEW: ${it.destination.id}")
+                BuildOverviewPage(breakingNewsViewModel, Actions(navCtrl))
+            }
+            composable(DETAIL) {
+                Logger("DETAIL: ${it.destination.id}")
+                BuildDetailPage(Actions(navCtrl))
+            }
         }
     }
     onDispose {
-        Log.d("debug compose", "Navigation-Content onDispose")
-        navCtrl.popBackStack(navCtrl.graph.startDestination, true)
+        Logger("Navigation-Content onDispose")
     }
 }

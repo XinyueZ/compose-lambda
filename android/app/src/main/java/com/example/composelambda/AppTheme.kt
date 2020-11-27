@@ -16,6 +16,7 @@
 
 package com.example.composelambda
 
+import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
@@ -29,23 +30,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
 @Composable
-fun AppTheme(
-    child: @Composable (() -> Unit),
-) {
+fun AppTheme(child: @Composable (() -> Unit)) {
     val appThemeModel: AppThemeModel = viewModel(factory = AppThemeModelFactory)
-    when (appThemeModel.isDark) {
-        true -> AppDarkTheme {
-            child()
-        }
-        else -> AppLightTheme {
-            child()
-        }
+    val themeData = if (appThemeModel.isDark) appDarkTheme() else appLightTheme()
+    MaterialTheme(colors = themeData) {
+        child()
     }
 }
 
 @Composable
-fun AppLightTheme(child: @Composable (() -> Unit)) {
-    val colors = lightColors(
+fun appLightTheme(): Colors {
+    return lightColors(
         primary = colorResource(R.color.indigo),
         primaryVariant = colorResource(R.color.indigo_deep),
         secondary = colorResource(R.color.teal_deep),
@@ -59,14 +54,11 @@ fun AppLightTheme(child: @Composable (() -> Unit)) {
         onSurface = colorResource(R.color.black),
         onError = colorResource(R.color.white),
     )
-    MaterialTheme(colors = colors) {
-        child()
-    }
 }
 
 @Composable
-fun AppDarkTheme(child: @Composable (() -> Unit)) {
-    val colors = darkColors(
+fun appDarkTheme(): Colors {
+    return darkColors(
         primary = colorResource(R.color.indigo),
         primaryVariant = colorResource(R.color.indigo_deep),
         secondary = colorResource(R.color.teal_deep),
@@ -79,9 +71,6 @@ fun AppDarkTheme(child: @Composable (() -> Unit)) {
         onSurface = colorResource(R.color.white),
         onError = colorResource(R.color.black),
     )
-    MaterialTheme(colors = colors) {
-        child()
-    }
 }
 
 object AppThemeModelFactory : ViewModelProvider.Factory {

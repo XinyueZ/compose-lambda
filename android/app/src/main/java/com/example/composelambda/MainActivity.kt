@@ -23,7 +23,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.platform.setContent
 import com.example.composelambda.appNav.NavigationContent
-import com.example.composelambda.appNav.NavigationHost
 import com.example.composelambda.pages.viewmodels.BreakingNewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,11 +33,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            NavigationHost {
-                AppTheme {
-                    Surface(color = MaterialTheme.colors.surface) {
-                        NavigationContent(it, breakingNewsViewModel)
-                    }
+            AppTheme {
+                Surface(color = MaterialTheme.colors.surface) {
+                    NavigationContent(breakingNewsViewModel)
                 }
             }
         }
