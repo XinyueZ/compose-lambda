@@ -16,27 +16,51 @@
 
 package com.example.composelambda.pages.viewmodels
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.composelambda.async.OnResult
 import com.example.composelambda.async.OnResult.OnError
+import com.example.composelambda.async.OnResult.OnInit
 import com.example.composelambda.async.OnResult.OnWaiting
 import com.example.composelambda.domains.BreakingNews
 import com.example.composelambda.repositories.BreakingNewsRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 
 class BreakingNewsViewModel @ViewModelInject constructor(
     private val repository: BreakingNewsRepository
 ) : ViewModel() {
 
+//    @OptIn(ExperimentalCoroutinesApi::class)
+//    var breakingNewsState: Flow<OnResult<BreakingNews>> = repository.fetchBreakingNews().onStart {
+//        Log.d("breakingNewsState", "onStart")
+//        emit(OnWaiting(null))
+//    }.catch {
+//        Log.d("breakingNewsState", "catch")
+//        emit(OnError(it, BreakingNews.empty))
+//    }
+//        private set
+
+    var breakingNewsState: OnResult<BreakingNews> by mutableStateOf(OnInit())
+        private set
+
     @OptIn(ExperimentalCoroutinesApi::class)
-    val breakingNewsState: Flow<OnResult<BreakingNews>> = repository.fetchBreakingNews().onStart {
-        emit(OnWaiting(null))
-    }.catch {
-        emit(OnError(it, BreakingNews.empty))
+    fun fetchBreakingNews() = viewModelScope.launch {
+
+        repository.fetchBreakingNews().onStart {
+            emit(OnWaiting(null))
+        }.catch {
+            emit(OnError(it, BreakingNews.empty))
+        }.collect {
+            breakingNewsState = it
+        }
     }
 
     fun echo(): BreakingNews = repository.echo()
