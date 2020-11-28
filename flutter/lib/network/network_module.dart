@@ -4,7 +4,7 @@ import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
-List<SingleChildWidget> networkProviders = <SingleChildWidget>[
+List<SingleChildWidget> networkModule = <SingleChildWidget>[
   Provider<AppHttpClient>(
     create: (_) => AppHttpClient(
       client: Client(),
@@ -21,7 +21,7 @@ List<SingleChildWidget> networkProviders = <SingleChildWidget>[
           return previous;
         }
         return RestClient(
-          baseUrl: "https://dl.dropboxusercontent.com",
+          baseUrl: "https://dl.dropboxusercontent.com/",
           client: client,
         );
       }),
