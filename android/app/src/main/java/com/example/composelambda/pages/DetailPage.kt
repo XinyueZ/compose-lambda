@@ -21,10 +21,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import com.example.composelambda.R
-import com.example.composelambda.appNav.AppNavigator
+import com.example.composelambda.appNav.Actions
 
 @Composable
-fun BuildDetailPage() {
+fun BuildDetailPage(actions: Actions) {
 
     var delta by remember { mutableStateOf(0) }
 
@@ -33,7 +33,7 @@ fun BuildDetailPage() {
             BuildAppBar(
                 "The guy, occupying the Oval"
             ) {
-                AppNavigator.popBackStack()
+                actions.upBack()
             }
         },
         bodyContent = {
@@ -99,7 +99,7 @@ fun BuildDetailPage() {
                         .copy(
                             fontFamily = FontFamily.Monospace,
                             letterSpacing = 0.12.em,
-                            fontSize = ( MaterialTheme.typography.body1.fontSize.value + delta).sp,
+                            fontSize = (MaterialTheme.typography.body1.fontSize.value + delta).sp,
                         )
 
                 )

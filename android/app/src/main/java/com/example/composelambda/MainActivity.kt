@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.platform.setContent
-import com.example.composelambda.appNav.AppRouter
 import com.example.composelambda.appNav.NavigationContent
 
 class MainActivity : AppCompatActivity() {
@@ -13,9 +12,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Surface(color = MaterialTheme.colors.surface) {
-                NavigationContent {
-                    AppRouter()
+            AppTheme {
+                Surface(color = MaterialTheme.colors.surface) {
+                    NavigationContent()
                 }
             }
         }
