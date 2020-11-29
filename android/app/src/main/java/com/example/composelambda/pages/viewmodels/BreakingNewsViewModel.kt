@@ -24,7 +24,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.composelambda.async.OnResult
 import com.example.composelambda.async.OnResult.OnError
-import com.example.composelambda.async.OnResult.OnInit
+import com.example.composelambda.async.OnResult.OnNothing
 import com.example.composelambda.async.OnResult.OnWaiting
 import com.example.composelambda.domains.BreakingNews
 import com.example.composelambda.repositories.BreakingNewsRepository
@@ -48,7 +48,7 @@ class BreakingNewsViewModel @ViewModelInject constructor(
 //    }
 //        private set
 
-    var breakingNewsState: OnResult<BreakingNews> by mutableStateOf(OnInit())
+    var breakingNewsState: OnResult<BreakingNews> by mutableStateOf(OnNothing())
         private set
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -62,6 +62,4 @@ class BreakingNewsViewModel @ViewModelInject constructor(
             breakingNewsState = it
         }
     }
-
-    fun echo(): BreakingNews = repository.echo()
 }

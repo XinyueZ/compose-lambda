@@ -20,7 +20,6 @@ import com.example.composelambda.async.OnResult
 import com.example.composelambda.async.onError
 import com.example.composelambda.async.onSuccess
 import com.example.composelambda.domains.BreakingNews
-import com.example.composelambda.domains.BreakingNews.Companion.default
 import com.example.composelambda.network.NewsService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -30,13 +29,11 @@ import java.lang.System.currentTimeMillis
 import javax.inject.Inject
 
 interface BreakingNewsRepository {
-    fun echo(): BreakingNews
     fun fetchBreakingNews(): Flow<OnResult<BreakingNews>>
 }
 
 class BreakingNewsRepositoryImpl @Inject constructor(private val newsService: NewsService) :
     BreakingNewsRepository {
-    override fun echo(): BreakingNews = default
 
     override fun fetchBreakingNews(): Flow<OnResult<BreakingNews>> {
         return flow {

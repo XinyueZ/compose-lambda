@@ -20,7 +20,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
-import kotlinx.serialization.ExperimentalSerializationApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -28,7 +27,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 @InstallIn(ApplicationComponent::class)
 object NetworkModule {
 
-    @ExperimentalSerializationApi
+    // @ExperimentalSerializationApi
     @Provides
     fun provideRetrofit(): Retrofit {
         // val contentType = "application/json".toMediaType()

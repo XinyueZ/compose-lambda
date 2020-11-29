@@ -85,7 +85,7 @@ fun BuildSwitchTheme() {
 
         Spacer(modifier = Modifier.preferredWidth(10.dp))
 
-        Text(if (appThemeModel.isDark) "Dark" else "Light")
+        Text(if (appThemeModel.isDark) "Light" else "Dark")
 
         Spacer(modifier = Modifier.preferredWidth(16.dp))
     }

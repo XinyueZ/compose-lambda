@@ -17,7 +17,7 @@
 package com.example.composelambda.async
 
 sealed class OnResult<out R> {
-    class OnInit<T> : OnResult<T>()
+    class OnNothing<T> : OnResult<T>()
     data class OnWaiting<out T>(val data: T?) : OnResult<T>()
     data class OnSuccess<out T>(val data: T) : OnResult<T>()
     data class OnError<T>(val exception: Throwable, val error: T?) : OnResult<T>()
