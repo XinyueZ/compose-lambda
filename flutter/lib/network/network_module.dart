@@ -5,24 +5,12 @@ import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
 List<SingleChildWidget> networkModule = <SingleChildWidget>[
-  Provider<AppHttpClient>(
-    create: (_) => AppHttpClient(
-      client: Client(),
+  Provider<RestClient>(
+    create: (_) => RestClient(
+      baseUrl: "https://dl.dropboxusercontent.com/",
+      client: AppHttpClient(
+        client: Client(),
+      ),
     ),
   ),
-  ProxyProvider<Client, RestClient>(
-      create: (_) => null,
-      update: (
-        _,
-        Client client,
-        RestClient previous,
-      ) {
-        if (previous != null) {
-          return previous;
-        }
-        return RestClient(
-          baseUrl: "https://dl.dropboxusercontent.com/",
-          client: client,
-        );
-      }),
 ];

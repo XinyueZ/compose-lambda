@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 
 class ThemeApp extends StatelessWidget {
   const ThemeApp({
-    @required this.child,
-  }) : assert(child is Widget);
+    this.child,
+  });
 
   final Widget child;
 
@@ -19,7 +19,7 @@ class ThemeApp extends StatelessWidget {
         return MaterialApp(
           theme: isDark ? _appDarkTheme : _appLightTheme,
           onGenerateRoute: appRouter,
-          title: "News report",
+          onGenerateTitle: (context) => "News report",
           home: child,
         );
       },
