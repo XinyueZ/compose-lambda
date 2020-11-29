@@ -1,37 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_compose_lambda/app_nav/app_router.dart';
-import 'package:flutter_compose_lambda/network/network_module.dart';
-import 'package:flutter_compose_lambda/repositories/repository_module.dart';
 import 'package:provider/provider.dart';
-import 'package:provider/single_child_widget.dart';
 
 class ThemeApp extends StatelessWidget {
   const ThemeApp({
-    @required this.home,
-  }) : assert(home is Widget);
+    @required this.child,
+  }) : assert(child is Widget);
 
-  final Widget home;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: <SingleChildWidget>[
-        ...networkModule,
-        ...repositoryModule,
-        ListenableProvider<AppThemeModel>(
-          create: (_) => AppThemeModel(),
-          builder: (BuildContext context, Widget widget) {
-            final isDark = Provider.of<AppThemeModel>(context).isDark;
-            return MaterialApp(
-              theme: isDark ? _appDarkTheme : _appLightTheme,
-              onGenerateRoute: appRouter,
-              title: "News report",
-              home: home,
-            );
-          },
-        ),
-      ],
+    return ListenableProvider<AppThemeModel>(
+      create: (_) => AppThemeModel(),
+      builder: (BuildContext context, Widget widget) {
+        final isDark = Provider.of<AppThemeModel>(context).isDark;
+        return MaterialApp(
+          theme: isDark ? _appDarkTheme : _appLightTheme,
+          onGenerateRoute: appRouter,
+          title: "News report",
+          home: child,
+        );
+      },
     );
   }
 }
