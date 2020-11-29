@@ -14,10 +14,19 @@
  * limitations under the License.
  */
 
-package com.example.composelambda
+package com.example.composelambda.repositories
 
-import android.app.Application
-import dagger.hilt.android.HiltAndroidApp
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityRetainedComponent
 
-@HiltAndroidApp
-class ComposeApp : Application()
+@Module
+@InstallIn(ActivityRetainedComponent::class)
+abstract class RepositoryModule {
+
+    @Binds
+    abstract fun giveBreakingNewsRepository(
+        breakingNewsRepository: BreakingNewsRepositoryImpl
+    ): BreakingNewsRepository
+}

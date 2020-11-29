@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'kotlinx-serialization'
     id 'dagger.hilt.android.plugin'
 }
 
@@ -34,6 +35,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
         allWarningsAsErrors = true
+//        useIR = true
     }
 
     buildFeatures {
@@ -43,6 +45,11 @@ android {
     composeOptions {
         kotlinCompilerVersion kotlin_version
         kotlinCompilerExtensionVersion compose_version
+    }
+
+    packagingOptions {
+        excludes += "/META-INF/AL2.0"
+        excludes += "/META-INF/LGPL2.1"
     }
 }
 
@@ -58,8 +65,9 @@ dependencies {
     implementation "androidx.compose.animation:animation:$compose_version"
     implementation "androidx.ui:ui-tooling:$compose_version"
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
-    implementation "androidx.compose.animation:animation:$compose_version"
+
     implementation "androidx.navigation:navigation-compose:1.0.0-alpha02"
+    implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
 
     implementation 'androidx.appcompat:appcompat:1.3.0-alpha02'
     implementation 'androidx.activity:activity-ktx:1.1.0'
@@ -73,6 +81,16 @@ dependencies {
     implementation "androidx.hilt:hilt-common:$hilt_co_version"
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_co_version"
     kapt "androidx.hilt:hilt-compiler:$hilt_co_version"
+
+    implementation 'dev.chrisbanes.accompanist:accompanist-coil:0.3.3.1'
+
+
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0'
 
     androidTestImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test:rules:1.3.0'

@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package com.example.composelambda
+package com.example.composelambda.network
 
-import android.app.Application
-import dagger.hilt.android.HiltAndroidApp
+import com.example.composelambda.domains.BreakingNews
+import retrofit2.http.GET
 
-@HiltAndroidApp
-class ComposeApp : Application()
+interface NewsService {
+    @GET("/s/7fv2e7hsyz21rza/breaking-news.json")
+    suspend fun getBreakingNews(): BreakingNews
+}

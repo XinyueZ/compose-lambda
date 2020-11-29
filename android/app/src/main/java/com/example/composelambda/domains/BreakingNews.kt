@@ -14,10 +14,28 @@
  * limitations under the License.
  */
 
-package com.example.composelambda
+package com.example.composelambda.domains
+// import kotlinx.serialization.Serializable
 
-import android.app.Application
-import dagger.hilt.android.HiltAndroidApp
+// @Serializable
+data class BreakingNews(
+    val title: String,
+    val description: String,
+    val image: String
+) {
+    companion object {
+        @JvmStatic
+        val default = BreakingNews(
+            "Breaking News",
+            "Hi, this is the breaking news",
+            "https://dl.dropboxusercontent.com/s/4o1nq8pdtuv5vf6/Screenshot%202020-11-22%20at%2015.43.54.png"
+        )
 
-@HiltAndroidApp
-class ComposeApp : Application()
+        @JvmStatic
+        val empty = BreakingNews(
+            "",
+            "",
+            ""
+        )
+    }
+}

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.example.composelambda
+package com.example.composelambda.network
 
-import android.app.Application
-import dagger.hilt.android.HiltAndroidApp
+import okhttp3.MediaType
 
-@HiltAndroidApp
-class ComposeApp : Application()
+fun String.toMediaType(): MediaType {
+    return MediaType.get(this)
+}
