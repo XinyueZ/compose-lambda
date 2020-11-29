@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_compose_lambda/network/network_module.dart';
+import 'package:flutter_compose_lambda/pages/page_module.dart';
 import 'package:flutter_compose_lambda/repositories/repository_module.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
@@ -16,6 +17,7 @@ class AppProviders extends StatelessWidget {
       providers: <SingleChildWidget>[
         ...networkModule,
         ...repositoryModule,
+        ...pageModule,
       ],
       child: child,
     );
