@@ -18,11 +18,7 @@ package com.example.composelambda.pages
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollableColumn
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -64,18 +60,18 @@ fun BuildDetailPage(actions: Actions) {
             ScrollableColumn(
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp)
             ) {
-                Spacer(modifier = Modifier.preferredHeight(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
                 Image(
                     imageResource(R.drawable.trump_dump),
                     Modifier
-                        .preferredHeight(300.dp)
+                        .height(300.dp)
                         .fillMaxWidth()
                         .clip(
                             shape = RoundedCornerShape(10.dp),
                         ),
                     contentScale = ContentScale.Crop,
                 )
-                Spacer(modifier = Modifier.preferredHeight(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
                 Row(modifier = Modifier.align(alignment = Alignment.End)) {
                     TextButton(
                         onClick = {
@@ -111,7 +107,7 @@ fun BuildDetailPage(actions: Actions) {
                         fontSize = (MaterialTheme.typography.h5.fontSize.value + delta).sp,
                     )
                 )
-                Spacer(modifier = Modifier.preferredHeight(16.dp))
+                Spacer(modifier = Modifier.preferredHeightIn(16.dp))
                 Text(
                     text = "Former Vice President Joe Biden on Friday vowed to end the \"total, unrelenting, unending warfare\" of Trump-era politics as he relentlessly piled up votes in key states that look increasingly likely to pave his way to presidency.\n" +
                         "\n" +
@@ -132,7 +128,7 @@ fun BuildDetailPage(actions: Actions) {
                         )
 
                 )
-                Spacer(modifier = Modifier.preferredHeight(16.dp))
+                Spacer(modifier = Modifier.preferredHeightIn(16.dp))
             }
         }
     )

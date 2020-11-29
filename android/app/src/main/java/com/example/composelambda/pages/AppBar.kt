@@ -17,9 +17,7 @@
 package com.example.composelambda.pages
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.preferredWidth
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -83,10 +81,10 @@ fun BuildSwitchTheme() {
             }
         )
 
-        Spacer(modifier = Modifier.preferredWidth(10.dp))
+        Spacer(modifier = Modifier.preferredWidthIn(10.dp))
 
         Text(if (appThemeModel.isDark) "Light" else "Dark")
 
-        Spacer(modifier = Modifier.preferredWidth(16.dp))
+        Spacer(modifier = Modifier.preferredWidthIn(16.dp))
     }
 }
