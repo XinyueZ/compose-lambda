@@ -27,15 +27,16 @@ import com.example.composelambda.async.OnResult.OnError
 import com.example.composelambda.async.OnResult.OnNothing
 import com.example.composelambda.async.OnResult.OnWaiting
 import com.example.composelambda.domains.BreakingNews
-import com.example.composelambda.repositories.BreakingNewsRepository
+import com.example.composelambda.domains.PremiumNews
+import com.example.composelambda.repositories.NewsRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
-class BreakingNewsViewModel @ViewModelInject constructor(
-    private val repository: BreakingNewsRepository
+class NewsViewModel @ViewModelInject constructor(
+    private val repository: NewsRepository
 ) : ViewModel() {
 
 //    @OptIn(ExperimentalCoroutinesApi::class)
@@ -48,8 +49,23 @@ class BreakingNewsViewModel @ViewModelInject constructor(
 //    }
 //        private set
 
+    var premiumNewsState: OnResult<PremiumNews> by mutableStateOf(OnNothing())
+        private set
+
     var breakingNewsState: OnResult<BreakingNews> by mutableStateOf(OnNothing())
         private set
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun fetchPremiumNews() = viewModelScope.launch {
+
+        repository.fetchPremiumNews().onStart {
+            emit(OnWaiting(null))
+        }.catch {
+            emit(OnError(it, PremiumNews.empty))
+        }.collect {
+            premiumNewsState = it
+        }
+    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun fetchBreakingNews() = viewModelScope.launch {

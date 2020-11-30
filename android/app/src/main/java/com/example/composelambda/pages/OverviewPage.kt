@@ -19,7 +19,18 @@ package com.example.composelambda.pages
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.preferredWidth
+import androidx.compose.foundation.layout.preferredWidthIn
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumnForIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -46,14 +57,15 @@ import com.example.composelambda.R
 import com.example.composelambda.appNav.Actions
 import com.example.composelambda.async.OnResult.OnError
 import com.example.composelambda.async.OnResult.OnSuccess
-import com.example.composelambda.pages.viewmodels.BreakingNewsViewModel
+import com.example.composelambda.pages.viewmodels.NewsViewModel
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 @Suppress("UNCHECKED_CAST")
 @Composable
-fun BuildOverviewPage(vm: BreakingNewsViewModel, actions: Actions) {
+fun BuildOverviewPage(vm: NewsViewModel, actions: Actions) {
     onCommit {
         Logger("BuildOverviewPage / onCommit")
+        vm.fetchPremiumNews()
         vm.fetchBreakingNews()
     }
 
@@ -63,7 +75,7 @@ fun BuildOverviewPage(vm: BreakingNewsViewModel, actions: Actions) {
     val data =
         listOf(
             vm,
-            Pair("The guy, occupying the Oval", R.drawable.trump_dump),
+            vm,
             Pair("Loser or winner ?", R.drawable.trump_dump),
         )
 
@@ -79,10 +91,16 @@ fun BuildOverviewPage(vm: BreakingNewsViewModel, actions: Actions) {
                 contentPadding = PaddingValues(8.dp),
             ) { index, item ->
                 BuildOverviewCard(actions) {
-                    if (index == 0) {
-                        BuildBreakingNewsContent(vm)
-                    } else {
-                        BuildOverviewCardContent(item as Pair<String, Int>)
+                    when (index) {
+                        0 -> {
+                            BuildBreakingNewsContent(vm)
+                        }
+                        1 -> {
+                            BuildPremiumNewsContent(vm)
+                        }
+                        else -> {
+                            BuildOverviewCardContent(item as Pair<String, Int>)
+                        }
                     }
                 }
             }
@@ -130,7 +148,7 @@ fun BuildOverviewCardContent(item: Pair<String, Int>) {
 }
 
 @Composable
-fun BuildBreakingNewsContent(vm: BreakingNewsViewModel) = with(vm.breakingNewsState) {
+fun BuildBreakingNewsContent(vm: NewsViewModel) = with(vm.breakingNewsState) {
     onCommit {
         Logger("BuildBreakingNewsContent / onCommit")
     }
@@ -165,6 +183,72 @@ fun BuildBreakingNewsContent(vm: BreakingNewsViewModel) = with(vm.breakingNewsSt
             is OnError -> {
                 Spacer(modifier = Modifier.preferredWidthIn(16.dp))
                 IconButton(onClick = { vm.fetchBreakingNews() }) {
+                    Icon(
+                        vectorResource(R.drawable.ic_refresh),
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+                Text(
+                    text = "${exception.message}",
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically),
+                    style = MaterialTheme.typography.subtitle1.copy(
+                        textAlign = TextAlign.Left,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                )
+            }
+            else -> {
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    CircularProgressIndicator(
+                        strokeWidth = 1.5.dp,
+                        modifier = Modifier.size(
+                            50.dp
+                        ).align(Alignment.Center).padding(10.dp),
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun BuildPremiumNewsContent(vm: NewsViewModel) = with(vm.premiumNewsState) {
+    onCommit {
+        Logger("BuildPremiumNewsContent / onCommit")
+    }
+
+    onDispose {
+        Logger("BuildPremiumNewsContent / onDispose")
+    }
+    Row(
+        modifier = Modifier
+            .background(MaterialTheme.colors.secondary)
+    ) {
+        when (this@with) {
+            is OnSuccess -> {
+                CoilImage(
+                    data = data.image,
+                    modifier = Modifier
+                        .width(120.dp)
+                        .clip(shape = RoundedCornerShape(8.dp)),
+                )
+                Spacer(modifier = Modifier.preferredWidthIn(16.dp))
+                Text(
+                    text = data.title,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.CenterVertically),
+                    style = MaterialTheme.typography.subtitle1.copy(
+                        textAlign = TextAlign.Left,
+                        color = Color.White
+                    )
+                )
+            }
+            is OnError -> {
+                Spacer(modifier = Modifier.preferredWidthIn(16.dp))
+                IconButton(onClick = { vm.fetchPremiumNews() }) {
                     Icon(
                         vectorResource(R.drawable.ic_refresh),
                         modifier = Modifier.fillMaxSize()

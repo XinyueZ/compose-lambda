@@ -28,10 +28,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.composelambda.Logger
 import com.example.composelambda.pages.BuildDetailPage
 import com.example.composelambda.pages.BuildOverviewPage
-import com.example.composelambda.pages.viewmodels.BreakingNewsViewModel
+import com.example.composelambda.pages.viewmodels.NewsViewModel
 
 @Composable
-fun NavigationContent(breakingNewsViewModel: BreakingNewsViewModel) {
+fun NavigationContent(newsViewModel: NewsViewModel) {
     val navCtrl: NavHostController = rememberNavController()
     onCommit {
         Logger("Navigation-Content onCommit")
@@ -40,7 +40,7 @@ fun NavigationContent(breakingNewsViewModel: BreakingNewsViewModel) {
         NavHost(navCtrl, startDestination = OVERVIEW) {
             composable(OVERVIEW) {
                 Logger("OVERVIEW: ${it.destination.id}")
-                BuildOverviewPage(breakingNewsViewModel, Actions(navCtrl))
+                BuildOverviewPage(newsViewModel, Actions(navCtrl))
             }
             composable(DETAIL) {
                 Logger("DETAIL: ${it.destination.id}")

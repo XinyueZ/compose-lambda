@@ -14,19 +14,28 @@
  * limitations under the License.
  */
 
-package com.example.composelambda.repositories
+package com.example.composelambda.domains
+// import kotlinx.serialization.Serializable
 
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityRetainedComponent
+// @Serializable
+data class PremiumNews(
+    val title: String,
+    val description: String,
+    val image: String
+) {
+    companion object {
+        @JvmStatic
+        val default = PremiumNews(
+            "Premium News",
+            "Hi, this is the premium news",
+            "https://dl.dropboxusercontent.com/s/k0ujkp3ti368z4x/trump_dump.png"
+        )
 
-@Module
-@InstallIn(ActivityRetainedComponent::class)
-abstract class RepositoryModule {
-
-    @Binds
-    abstract fun giveNewsRepository(
-        repository: NewsRepositoryImpl
-    ): NewsRepository
+        @JvmStatic
+        val empty = PremiumNews(
+            "",
+            "",
+            ""
+        )
+    }
 }

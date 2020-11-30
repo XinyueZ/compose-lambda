@@ -17,9 +17,13 @@
 package com.example.composelambda.network
 
 import com.example.composelambda.domains.BreakingNews
+import com.example.composelambda.domains.PremiumNews
 import retrofit2.http.GET
 
 interface NewsService {
     @GET("/s/7fv2e7hsyz21rza/breaking-news.json")
     suspend fun getBreakingNews(): BreakingNews
+
+    @GET("/s/ibjhxji5o237497/premium-news.json")
+    suspend fun getPremiumNews(): PremiumNews
 }
