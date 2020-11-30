@@ -5,8 +5,8 @@ import 'package:flutter_compose_lambda/repositories/repository_module.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
-class AppProviders extends StatelessWidget {
-  const AppProviders({
+class AppProvider extends StatelessWidget {
+  const AppProvider({
     @required this.child,
   }) : assert(child is Widget);
   final Widget child;
