@@ -20,7 +20,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,7 +31,6 @@ import androidx.compose.foundation.layout.preferredWidth
 import androidx.compose.foundation.layout.preferredWidthIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumnForIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
@@ -72,12 +71,6 @@ fun BuildOverviewPage(vm: NewsViewModel, actions: Actions) {
     onDispose {
         Logger("BuildOverviewPage / onDispose")
     }
-    val data =
-        listOf(
-            vm,
-            vm,
-            Pair("Loser or winner ?", R.drawable.trump_dump),
-        )
 
     Scaffold(
         topBar = {
@@ -86,22 +79,14 @@ fun BuildOverviewPage(vm: NewsViewModel, actions: Actions) {
             )
         },
         bodyContent = {
-            LazyColumnForIndexed(
-                data,
-                contentPadding = PaddingValues(8.dp),
-            ) { index, item ->
+            Column(
+                modifier = Modifier.padding(8.dp)
+            ) {
                 BuildOverviewCard(actions) {
-                    when (index) {
-                        0 -> {
-                            BuildBreakingNewsContent(vm)
-                        }
-                        1 -> {
-                            BuildPremiumNewsContent(vm)
-                        }
-                        else -> {
-                            BuildOverviewCardContent(item as Pair<String, Int>)
-                        }
-                    }
+                    BuildBreakingNewsContent(vm)
+                }
+                BuildOverviewCard(actions) {
+                    BuildPremiumNewsContent(vm)
                 }
             }
         }
@@ -122,29 +107,6 @@ fun BuildOverviewCard(actions: Actions, content: @Composable () -> Unit) {
             },
         content = content,
     )
-}
-
-@Composable
-fun BuildOverviewCardContent(item: Pair<String, Int>) {
-    Row {
-        Image(
-            imageResource(item.second),
-            Modifier
-                .width(120.dp)
-                .height(90.dp)
-                .clip(shape = RoundedCornerShape(8.dp)),
-        )
-        Spacer(modifier = Modifier.preferredWidth(16.dp))
-        Text(
-            text = item.first,
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.CenterVertically),
-            style = MaterialTheme.typography.subtitle1.copy(
-                textAlign = TextAlign.Left,
-            )
-        )
-    }
 }
 
 @Composable
