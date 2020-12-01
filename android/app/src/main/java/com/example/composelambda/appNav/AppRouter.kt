@@ -42,9 +42,15 @@ fun NavigationContent(newsViewModel: NewsViewModel) {
                 Logger("OVERVIEW: ${it.destination.id}")
                 BuildOverviewPage(newsViewModel, Actions(navCtrl))
             }
-            composable(DETAIL) {
-                Logger("DETAIL: ${it.destination.id}")
-                BuildDetailPage(Actions(navCtrl))
+
+            composable("${NewsType.BreakingNews}") {
+                Logger("DETAIL BreakingNews: ${it.destination.id}")
+                BuildDetailPage(newsViewModel, NewsType.BreakingNews, Actions(navCtrl))
+            }
+
+            composable("${NewsType.PremiumNews}") {
+                Logger("DETAIL PremiumNews: ${it.destination.id}")
+                BuildDetailPage(newsViewModel, NewsType.PremiumNews, Actions(navCtrl))
             }
         }
     }

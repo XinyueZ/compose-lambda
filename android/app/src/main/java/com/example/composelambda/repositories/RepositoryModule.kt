@@ -29,4 +29,9 @@ abstract class RepositoryModule {
     abstract fun giveNewsRepository(
         repository: NewsRepositoryImpl
     ): NewsRepository
+
+    @Binds
+    abstract fun giveNewsStorageRepository(
+        repository: NewsStorageRepositoryImpl
+    ): NewsStorageRepository
 }

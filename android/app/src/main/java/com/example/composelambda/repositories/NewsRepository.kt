@@ -22,20 +22,24 @@ import com.example.composelambda.async.onSuccess
 import com.example.composelambda.domains.BreakingNews
 import com.example.composelambda.domains.PremiumNews
 import com.example.composelambda.network.NewsService
+import java.lang.System.currentTimeMillis
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import java.lang.System.currentTimeMillis
-import javax.inject.Inject
+import kotlinx.coroutines.withContext
+import okhttp3.Dispatcher
 
-interface NewsRepository {
+interface NewsRepository : NewsStorageRepository {
     fun fetchPremiumNews(): Flow<OnResult<PremiumNews>>
     fun fetchBreakingNews(): Flow<OnResult<BreakingNews>>
 }
 
-class NewsRepositoryImpl @Inject constructor(private val newsService: NewsService) :
-    NewsRepository {
+class NewsRepositoryImpl @Inject constructor(
+    private val newsService: NewsService,
+    newsStorageRepository: NewsStorageRepository,
+) : NewsRepository, NewsStorageRepository by newsStorageRepository {
 
     override fun fetchPremiumNews(): Flow<OnResult<PremiumNews>> {
         return flow {
@@ -50,6 +54,9 @@ class NewsRepositoryImpl @Inject constructor(private val newsService: NewsServic
                 }
                 else -> {
                     // Give the response wrapper out
+                    withContext(Dispatchers.Default) {
+                        savePremiumNews(newsService.getPremiumNews())
+                    }
                     emit(newsService.getPremiumNews().onSuccess())
                 }
             }
@@ -69,6 +76,9 @@ class NewsRepositoryImpl @Inject constructor(private val newsService: NewsServic
                 }
                 else -> {
                     // Give the response wrapper out
+                    withContext(Dispatchers.Default) {
+                        saveBreakingNews(newsService.getBreakingNews())
+                    }
                     emit(newsService.getBreakingNews().onSuccess())
                 }
             }

@@ -19,11 +19,13 @@ package com.example.composelambda.appNav
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigate
 
+enum class NewsType { BreakingNews, PremiumNews }
+
 class Actions(navCtrl: NavHostController) {
     val upBack: () -> Unit = {
         navCtrl.popBackStack()
     }
-    val selectNews: () -> Unit = {
-        navCtrl.navigate(DETAIL)
+    val selectNews: (newsType: NewsType) -> Unit = {
+        navCtrl.navigate("$it")
     }
 }

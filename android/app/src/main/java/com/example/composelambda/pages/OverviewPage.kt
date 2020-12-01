@@ -16,7 +16,6 @@
 
 package com.example.composelambda.pages
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -25,10 +24,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.preferredWidth
-import androidx.compose.foundation.layout.preferredWidthIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -39,6 +35,8 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.onDispose
@@ -46,7 +44,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -54,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import com.example.composelambda.Logger
 import com.example.composelambda.R
 import com.example.composelambda.appNav.Actions
+import com.example.composelambda.appNav.NewsType
 import com.example.composelambda.async.OnResult.OnError
 import com.example.composelambda.async.OnResult.OnSuccess
 import com.example.composelambda.pages.viewmodels.NewsViewModel
@@ -82,11 +80,11 @@ fun BuildOverviewPage(vm: NewsViewModel, actions: Actions) {
             Column(
                 modifier = Modifier.padding(8.dp)
             ) {
-                BuildOverviewCard(actions) {
-                    BuildBreakingNewsContent(vm)
+                BuildOverviewCard {
+                    BuildBreakingNewsContent(vm, NewsType.BreakingNews, actions)
                 }
-                BuildOverviewCard(actions) {
-                    BuildPremiumNewsContent(vm)
+                BuildOverviewCard {
+                    BuildPremiumNewsContent(vm, NewsType.PremiumNews, actions)
                 }
             }
         }
@@ -94,149 +92,154 @@ fun BuildOverviewPage(vm: NewsViewModel, actions: Actions) {
 }
 
 @Composable
-fun BuildOverviewCard(actions: Actions, content: @Composable () -> Unit) {
+fun BuildOverviewCard(content: @Composable () -> Unit) {
     Card(
         elevation = 5.dp,
         shape = RoundedCornerShape(8.dp),
         backgroundColor = MaterialTheme.colors.surface,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 5.dp, bottom = 5.dp)
-            .clickable(enabled = true) {
-                actions.selectNews()
-            },
+            .padding(top = 5.dp, bottom = 5.dp),
         content = content,
     )
 }
 
 @Composable
-fun BuildBreakingNewsContent(vm: NewsViewModel) = with(vm.breakingNewsState) {
-    onCommit {
-        Logger("BuildBreakingNewsContent / onCommit")
-    }
+fun BuildBreakingNewsContent(vm: NewsViewModel, newsType: NewsType, actions: Actions) =
+    with(vm.breakingNewsState) {
+        onCommit {
+            Logger("BuildBreakingNewsContent / onCommit")
+        }
 
-    onDispose {
-        Logger("BuildBreakingNewsContent / onDispose")
-    }
-    Row(
-        modifier = Modifier
-            .background(MaterialTheme.colors.error)
-    ) {
-        when (this@with) {
-            is OnSuccess -> {
-                CoilImage(
-                    data = data.image,
-                    modifier = Modifier
-                        .width(120.dp)
-                        .clip(shape = RoundedCornerShape(8.dp)),
-                )
-                Spacer(modifier = Modifier.preferredWidthIn(16.dp))
-                Text(
-                    text = data.title,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.CenterVertically),
-                    style = MaterialTheme.typography.subtitle1.copy(
-                        textAlign = TextAlign.Left,
-                        color = Color.White
+        onDispose {
+            Logger("BuildBreakingNewsContent / onDispose")
+        }
+        Row(
+            modifier = Modifier
+                .background(MaterialTheme.colors.error)
+                .clickable(enabled = this@with is OnSuccess) {
+                    actions.selectNews(newsType)
+                }
+        ) {
+            when (this@with) {
+                is OnSuccess -> {
+                    CoilImage(
+                        data = data.image,
+                        modifier = Modifier
+                            .width(120.dp)
+                            .clip(shape = RoundedCornerShape(8.dp)),
                     )
-                )
-            }
-            is OnError -> {
-                Spacer(modifier = Modifier.preferredWidthIn(16.dp))
-                IconButton(onClick = { vm.fetchBreakingNews() }) {
-                    Icon(
-                        vectorResource(R.drawable.ic_refresh),
-                        modifier = Modifier.fillMaxSize()
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Text(
+                        text = data.title,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.CenterVertically),
+                        style = MaterialTheme.typography.subtitle1.copy(
+                            textAlign = TextAlign.Left,
+                            color = Color.White
+                        )
                     )
                 }
-                Text(
-                    text = "${exception.message}",
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically),
-                    style = MaterialTheme.typography.subtitle1.copy(
-                        textAlign = TextAlign.Left,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
+                is OnError -> {
+                    Spacer(modifier = Modifier.width(16.dp))
+                    IconButton(onClick = { vm.fetchBreakingNews() }) {
+                        Icon(
+                            vectorResource(R.drawable.ic_refresh),
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+                    Text(
+                        text = "${exception.message}",
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically),
+                        style = MaterialTheme.typography.subtitle1.copy(
+                            textAlign = TextAlign.Left,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
+                        )
                     )
-                )
-            }
-            else -> {
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    CircularProgressIndicator(
-                        strokeWidth = 1.5.dp,
-                        modifier = Modifier.size(
-                            50.dp
-                        ).align(Alignment.Center).padding(10.dp),
-                    )
+                }
+                else -> {
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        CircularProgressIndicator(
+                            strokeWidth = 1.5.dp,
+                            modifier = Modifier.size(
+                                50.dp
+                            ).align(Alignment.Center).padding(10.dp),
+                        )
+                    }
                 }
             }
         }
     }
-}
 
 @Composable
-fun BuildPremiumNewsContent(vm: NewsViewModel) = with(vm.premiumNewsState) {
-    onCommit {
-        Logger("BuildPremiumNewsContent / onCommit")
-    }
+fun BuildPremiumNewsContent(vm: NewsViewModel, newsType: NewsType, actions: Actions) =
+    with(vm.premiumNewsState) {
+        onCommit {
+            Logger("BuildPremiumNewsContent / onCommit")
+        }
 
-    onDispose {
-        Logger("BuildPremiumNewsContent / onDispose")
-    }
-    Row(
-        modifier = Modifier
-            .background(MaterialTheme.colors.secondary)
-    ) {
-        when (this@with) {
-            is OnSuccess -> {
-                CoilImage(
-                    data = data.image,
-                    modifier = Modifier
-                        .width(120.dp)
-                        .clip(shape = RoundedCornerShape(8.dp)),
-                )
-                Spacer(modifier = Modifier.preferredWidthIn(16.dp))
-                Text(
-                    text = data.title,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.CenterVertically),
-                    style = MaterialTheme.typography.subtitle1.copy(
-                        textAlign = TextAlign.Left,
-                        color = Color.White
+        onDispose {
+            Logger("BuildPremiumNewsContent / onDispose")
+        }
+        Row(
+            modifier = Modifier
+                .background(MaterialTheme.colors.secondary)
+                .clickable(enabled = this@with is OnSuccess) {
+                    actions.selectNews(newsType)
+                }
+        ) {
+            when (this@with) {
+                is OnSuccess -> {
+                    CoilImage(
+                        data = data.image,
+                        modifier = Modifier
+                            .width(120.dp)
+                            .clip(shape = RoundedCornerShape(8.dp)),
                     )
-                )
-            }
-            is OnError -> {
-                Spacer(modifier = Modifier.preferredWidthIn(16.dp))
-                IconButton(onClick = { vm.fetchPremiumNews() }) {
-                    Icon(
-                        vectorResource(R.drawable.ic_refresh),
-                        modifier = Modifier.fillMaxSize()
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Text(
+                        text = data.title,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.CenterVertically),
+                        style = MaterialTheme.typography.subtitle1.copy(
+                            textAlign = TextAlign.Left,
+                            color = Color.White
+                        )
                     )
                 }
-                Text(
-                    text = "${exception.message}",
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically),
-                    style = MaterialTheme.typography.subtitle1.copy(
-                        textAlign = TextAlign.Left,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
+                is OnError -> {
+                    Spacer(modifier = Modifier.width(16.dp))
+                    IconButton(onClick = { vm.fetchPremiumNews() }) {
+                        Icon(
+                            vectorResource(R.drawable.ic_refresh),
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+                    Text(
+                        text = "${exception.message}",
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically),
+                        style = MaterialTheme.typography.subtitle1.copy(
+                            textAlign = TextAlign.Left,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
+                        )
                     )
-                )
-            }
-            else -> {
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    CircularProgressIndicator(
-                        strokeWidth = 1.5.dp,
-                        modifier = Modifier.size(
-                            50.dp
-                        ).align(Alignment.Center).padding(10.dp),
-                    )
+                }
+                else -> {
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        CircularProgressIndicator(
+                            strokeWidth = 1.5.dp,
+                            modifier = Modifier.size(
+                                50.dp
+                            ).align(Alignment.Center).padding(10.dp),
+                        )
+                    }
                 }
             }
         }
     }
-}

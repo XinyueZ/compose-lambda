@@ -36,18 +36,12 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 class NewsViewModel @ViewModelInject constructor(
-    private val repository: NewsRepository
+    private val repository: NewsRepository,
 ) : ViewModel() {
 
-//    @OptIn(ExperimentalCoroutinesApi::class)
-//    var breakingNewsState: Flow<OnResult<BreakingNews>> = repository.fetchBreakingNews().onStart {
-//        Log.d("breakingNewsState", "onStart")
-//        emit(OnWaiting(null))
-//    }.catch {
-//        Log.d("breakingNewsState", "catch")
-//        emit(OnError(it, BreakingNews.empty))
-//    }
-//        private set
+    val breakingNewsDetail = repository.breakingNewsStorage
+
+    val premiumNewsDetail = repository.premiumNewsStorage
 
     var premiumNewsState: OnResult<PremiumNews> by mutableStateOf(OnNothing())
         private set
