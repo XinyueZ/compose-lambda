@@ -27,16 +27,16 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.viewModel
 import com.example.composelambda.AppThemeModel
 import com.example.composelambda.AppThemeModelFactory
-import com.example.composelambda.R
 
 @Composable
 fun BuildAppBar(
@@ -59,7 +59,7 @@ fun BuildAppBar(
             {
                 IconButton(onClick = backNavigateTo) {
                     Icon(
-                        vectorResource(R.drawable.ic_back),
+                        imageVector = Icons.Outlined.ArrowBack,
                         modifier = Modifier.fillMaxSize()
                     )
                 }

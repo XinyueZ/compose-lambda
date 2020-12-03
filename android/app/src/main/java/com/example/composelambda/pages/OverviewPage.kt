@@ -44,12 +44,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.composelambda.Logger
-import com.example.composelambda.R
 import com.example.composelambda.appNav.Actions
 import com.example.composelambda.appNav.NewsType
 import com.example.composelambda.async.OnResult.OnError
@@ -145,7 +143,7 @@ fun BuildBreakingNewsContent(vm: NewsViewModel, newsType: NewsType, actions: Act
                     Spacer(modifier = Modifier.width(16.dp))
                     IconButton(onClick = { vm.fetchBreakingNews() }) {
                         Icon(
-                            vectorResource(R.drawable.ic_refresh),
+                            imageVector = Icons.Outlined.Refresh,
                             modifier = Modifier.fillMaxSize()
                         )
                     }
@@ -215,7 +213,7 @@ fun BuildPremiumNewsContent(vm: NewsViewModel, newsType: NewsType, actions: Acti
                     Spacer(modifier = Modifier.width(16.dp))
                     IconButton(onClick = { vm.fetchPremiumNews() }) {
                         Icon(
-                            vectorResource(R.drawable.ic_refresh),
+                            imageVector = Icons.Outlined.Refresh,
                             modifier = Modifier.fillMaxSize()
                         )
                     }

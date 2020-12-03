@@ -22,14 +22,13 @@ import com.example.composelambda.async.onSuccess
 import com.example.composelambda.domains.BreakingNews
 import com.example.composelambda.domains.PremiumNews
 import com.example.composelambda.network.NewsService
-import java.lang.System.currentTimeMillis
-import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
-import okhttp3.Dispatcher
+import java.lang.System.currentTimeMillis
+import javax.inject.Inject
 
 interface NewsRepository : NewsStorageRepository {
     fun fetchPremiumNews(): Flow<OnResult<PremiumNews>>
