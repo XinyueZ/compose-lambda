@@ -91,8 +91,8 @@ dependencies {
 
     implementation 'dev.chrisbanes.accompanist:accompanist-coil:0.3.4.compose-7001724-SNAPSHOT'
 
-    implementation "androidx.datastore:datastore:1.0.0-alpha04"
-    implementation  "androidx.datastore:datastore-core:1.0.0-alpha04"
+    implementation "androidx.datastore:datastore:$datastore_version"
+    implementation  "androidx.datastore:datastore-core:$datastore_version"
     implementation  "com.google.protobuf:protobuf-javalite:3.11.0"
 
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"

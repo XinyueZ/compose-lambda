@@ -20,6 +20,7 @@ buildscript {
     ext.hilt_version = '2.29.1-alpha'
     ext.hilt_co_version = '1.0.0-alpha02'
     ext.compose_version = '1.0.0-alpha08'
+    ext.datastore_version = '1.0.0-alpha05'
 
     repositories {
         google()
