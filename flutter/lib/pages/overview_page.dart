@@ -23,8 +23,10 @@ class _OverviewPageState extends State<OverviewPage> {
   @override
   void initState() {
     super.initState();
-    scheduleMicrotask(() =>
-        Provider.of<NewsBloc>(context, listen: false).fetchBreakingNews());
+    scheduleMicrotask(() {
+      Provider.of<NewsBloc>(context, listen: false).fetchBreakingNews();
+      Provider.of<NewsBloc>(context, listen: false).fetchPremiumNews();
+    });
   }
 
   @override
@@ -39,31 +41,20 @@ class _OverviewPageState extends State<OverviewPage> {
   }
 
   Widget _buildBody(BuildContext context) {
-    final data = <dynamic>[
-      Provider.of<NewsBloc>(context, listen: false),
-      MapEntry("The guy, occupying the Oval", 'assets/trump_dump.png'),
-      MapEntry("Loser or winner ?", 'assets/trump_dump.png'),
-    ];
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: ListView.separated(
-        separatorBuilder: (BuildContext context, int index) => const Divider(
-          height: 3.0,
-          color: Colors.transparent,
-        ),
-        itemCount: data.length,
-        itemBuilder: (BuildContext context, int index) {
-          return _buildOverviewCard(
+      child: Column(
+        children: <Widget>[
+          _buildOverviewCard(
             context,
-            index == 0
-                ? _buildBreakingNewsContent(context)
-                : _buildOverviewCardContent(
-                    context,
-                    data[index] as MapEntry<String, String>,
-                  ),
-          );
-        },
+            _buildBreakingNewsContent(context),
+          ),
+          const SizedBox(height: 3.0),
+          _buildOverviewCard(
+            context,
+            _buildPremiumNewsContent(context),
+          ),
+        ],
       ),
     );
   }
@@ -89,29 +80,6 @@ class _OverviewPageState extends State<OverviewPage> {
           );
         },
       ),
-    );
-  }
-
-  Widget _buildOverviewCardContent(
-    BuildContext context,
-    MapEntry<String, String> entry,
-  ) {
-    return Row(
-      children: <Widget>[
-        ClipRRect(
-          borderRadius: BorderRadius.circular(8.0),
-          child: Image.asset(
-            entry.value,
-            width: 120,
-          ),
-        ),
-        const SizedBox(width: 16),
-        Text(
-          entry.key,
-          textAlign: TextAlign.start,
-          style: Theme.of(context).textTheme.subtitle1,
-        ),
-      ],
     );
   }
 
@@ -155,7 +123,6 @@ class _OverviewPageState extends State<OverviewPage> {
             ),
           );
         case ConnectionState.done:
-        default:
           return Row(
             children: <Widget>[
               ClipRRect(
@@ -175,13 +142,86 @@ class _OverviewPageState extends State<OverviewPage> {
               ),
             ],
           );
+        default:
+          return const SizedBox.shrink();
       }
     }
 
     return Container(
         child: _c(),
         decoration: BoxDecoration(
-          color: Theme.of(context).errorColor,
+          color: Theme.of(context).colorScheme.error,
+          borderRadius: BorderRadius.circular((8.0)),
+        ));
+  }
+
+  Widget _buildPremiumNewsContent(BuildContext context) {
+    Widget _c() {
+      final premiumNewsState = Provider.of<NewsBloc>(context).premiumNewsState;
+
+      if (premiumNewsState.hasError) {
+        return Row(
+          children: <Widget>[
+            const SizedBox(width: 16),
+            IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: () {
+                Provider.of<NewsBloc>(context, listen: false)
+                    .fetchPremiumNews();
+              },
+            ),
+            Text(
+              premiumNewsState.error.toString(),
+              textAlign: TextAlign.start,
+              style: Theme.of(context).textTheme.subtitle1,
+            ),
+          ],
+        );
+      }
+
+      switch (premiumNewsState.connectionState) {
+        case ConnectionState.waiting:
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: SizedBox(
+                width: 25,
+                height: 25,
+                child: CircularProgressIndicator(
+                  strokeWidth: 1.5,
+                ),
+              ),
+            ),
+          );
+        case ConnectionState.done:
+          return Row(
+            children: <Widget>[
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: Image.network(
+                  premiumNewsState.data.image,
+                  width: 120,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(premiumNewsState.data.title,
+                    textAlign: TextAlign.start,
+                    style: Theme.of(context).textTheme.subtitle1.copyWith(
+                          color: Colors.white,
+                        )),
+              ),
+            ],
+          );
+        default:
+          return const SizedBox.shrink();
+      }
+    }
+
+    return Container(
+        child: _c(),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.secondaryVariant,
           borderRadius: BorderRadius.circular((8.0)),
         ));
   }

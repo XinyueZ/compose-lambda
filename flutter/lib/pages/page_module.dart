@@ -8,14 +8,14 @@ List<SingleChildWidget> pageModule = <SingleChildWidget>[
       create: (_) => null,
       update: (
         _,
-        NewsRepository breakingNewsRepository,
+        NewsRepository newsRepository,
         NewsBloc previous,
       ) {
         if (previous != null) {
           return previous;
         }
         return NewsBloc(
-          breakingNewsRepository: breakingNewsRepository,
+          newsRepository: newsRepository,
         );
       }),
 ];
