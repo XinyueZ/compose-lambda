@@ -1,15 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_compose_lambda/domains/breaking_news.dart';
-import 'package:flutter_compose_lambda/repositories/breaking_news_repository.dart';
+import 'package:flutter_compose_lambda/repositories/news_repository.dart';
 
-class BreakingNewsBloc extends ChangeNotifier {
-  BreakingNewsBloc({
-    @required BreakingNewsRepository breakingNewsRepository,
-  })  : assert(breakingNewsRepository is BreakingNewsRepository),
+class NewsBloc extends ChangeNotifier {
+  NewsBloc({
+    @required NewsRepository breakingNewsRepository,
+  })  : assert(breakingNewsRepository is NewsRepository),
         _breakingNewsRepository = breakingNewsRepository;
 
-  final BreakingNewsRepository _breakingNewsRepository;
+  final NewsRepository _breakingNewsRepository;
 
   AsyncSnapshot<BreakingNews> breakingNewsState =
       const AsyncSnapshot<BreakingNews>.nothing();

@@ -6,12 +6,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_compose_lambda/domains/breaking_news.dart';
 import 'package:flutter_compose_lambda/network/rest_client.dart';
 
-abstract class BreakingNewsRepository {
+abstract class NewsRepository {
   Future<Result<BreakingNews>> fetchBreakingNews();
 }
 
-class BreakingNewsRepositoryImpl implements BreakingNewsRepository {
-  const BreakingNewsRepositoryImpl({
+class NewsRepositoryImpl implements NewsRepository {
+  const NewsRepositoryImpl({
     @required RestClient restClient,
   })  : assert(restClient is RestClient),
         _restClient = restClient;

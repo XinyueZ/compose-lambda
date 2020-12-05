@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_compose_lambda/app_nav/nav_const.dart';
 import 'package:flutter_compose_lambda/pages/app_bar.dart';
-import 'package:flutter_compose_lambda/pages/blocs/breaking_news_bloc.dart';
+import 'package:flutter_compose_lambda/pages/blocs/news_bloc.dart';
 import 'package:provider/provider.dart';
 
 class OverviewPage extends StatefulWidget {
@@ -24,8 +24,7 @@ class _OverviewPageState extends State<OverviewPage> {
   void initState() {
     super.initState();
     scheduleMicrotask(() =>
-        Provider.of<BreakingNewsBloc>(context, listen: false)
-            .fetchBreakingNews());
+        Provider.of<NewsBloc>(context, listen: false).fetchBreakingNews());
   }
 
   @override
@@ -41,7 +40,7 @@ class _OverviewPageState extends State<OverviewPage> {
 
   Widget _buildBody(BuildContext context) {
     final data = <dynamic>[
-      Provider.of<BreakingNewsBloc>(context, listen: false),
+      Provider.of<NewsBloc>(context, listen: false),
       MapEntry("The guy, occupying the Oval", 'assets/trump_dump.png'),
       MapEntry("Loser or winner ?", 'assets/trump_dump.png'),
     ];
@@ -119,7 +118,7 @@ class _OverviewPageState extends State<OverviewPage> {
   Widget _buildBreakingNewsContent(BuildContext context) {
     Widget _c() {
       final breakingNewsState =
-          Provider.of<BreakingNewsBloc>(context).breakingNewsState;
+          Provider.of<NewsBloc>(context).breakingNewsState;
 
       if (breakingNewsState.hasError) {
         return Row(
@@ -128,7 +127,7 @@ class _OverviewPageState extends State<OverviewPage> {
             IconButton(
               icon: Icon(Icons.refresh),
               onPressed: () {
-                Provider.of<BreakingNewsBloc>(context, listen: false)
+                Provider.of<NewsBloc>(context, listen: false)
                     .fetchBreakingNews();
               },
             ),
