@@ -31,6 +31,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.onCommit
+import androidx.compose.runtime.onDispose
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -43,6 +45,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import com.example.composelambda.Logger
 import com.example.composelambda.appNav.Actions
 import com.example.composelambda.appNav.NewsType
 import com.example.composelambda.domains.BreakingNews
@@ -53,9 +56,18 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 @Composable
 fun BuildDetailPage(
     vm: NewsViewModel,
+    enableSwitchTheme: Boolean,
     newsType: NewsType,
     actions: Actions,
 ) {
+
+    onCommit {
+        Logger("BuildDetailPage / onCommit")
+    }
+
+    onDispose {
+        Logger("BuildDetailPage / onDispose")
+    }
 
     val detailContent = vm.parserNewsDetail(newsType)
 
@@ -64,7 +76,10 @@ fun BuildDetailPage(
     Scaffold(
         topBar = {
             BuildAppBar(
-                detailContent[0]
+                detailContent[0],
+                enablePreferences = true,
+                enableSwitchTheme = enableSwitchTheme,
+                gotoPreferences = actions.gotoPreferences
             ) {
                 actions.upBack()
             }

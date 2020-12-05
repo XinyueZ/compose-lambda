@@ -16,25 +16,46 @@
 
 package com.example.composelambda
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.onCommit
+import androidx.compose.runtime.onDispose
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.viewinterop.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.composelambda.pages.viewmodels.PreferencesViewModel
 
 @Composable
-fun AppTheme(child: @Composable (() -> Unit)) {
+fun AppTheme(
+    preferencesViewModel: PreferencesViewModel,
+    defaultDarkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable (() -> Unit),
+) {
+    onCommit {
+        Logger("AppTheme / onCommit")
+    }
+
+    onDispose {
+        Logger("AppTheme / onDispose")
+    }
+
+    val followSystemTheme by preferencesViewModel.followSystemTheme.collectAsState(initial = true)
     val appThemeModel: AppThemeModel = viewModel(factory = AppThemeModelFactory)
-    val themeData = if (appThemeModel.isDark) appDarkTheme() else appLightTheme()
+    val isDarkTheme = (followSystemTheme && defaultDarkTheme) ||
+        appThemeModel.isDark
+
+    val themeData = if (isDarkTheme) appDarkTheme() else appLightTheme()
     MaterialTheme(colors = themeData) {
-        child()
+        content()
     }
 }
 

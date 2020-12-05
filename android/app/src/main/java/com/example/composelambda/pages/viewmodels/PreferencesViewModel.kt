@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package com.example.composelambda.appNav
+package com.example.composelambda.pages.viewmodels
 
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.navigate
+import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.composelambda.repositories.PreferencesRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
-enum class NewsType { BreakingNews, PremiumNews }
+class PreferencesViewModel @ViewModelInject constructor(
+    private val repository: PreferencesRepository,
+) : ViewModel() {
+    val followSystemTheme: Flow<Boolean> = repository.followSystemTheme
 
-class Actions(navCtrl: NavHostController) {
-    val upBack: () -> Unit = {
-        navCtrl.popBackStack()
-    }
-    val selectNews: (newsType: NewsType) -> Unit = {
-        navCtrl.navigate("$it")
-    }
-    val gotoPreferences: () -> Unit = {
-        navCtrl.navigate(PREFERENCES)
+    fun setFollowSystemTheme(value: Boolean) = viewModelScope.launch {
+        repository.setFollowSystemTheme(value)
     }
 }

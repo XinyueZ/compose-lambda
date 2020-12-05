@@ -29,7 +29,10 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.onCommit
+import androidx.compose.runtime.onDispose
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
@@ -37,12 +40,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.viewModel
 import com.example.composelambda.AppThemeModel
 import com.example.composelambda.AppThemeModelFactory
+import com.example.composelambda.Logger
 
 @Composable
 fun BuildAppBar(
     title: String,
-    backNavigateTo: (() -> Unit)? = null
+    enableSwitchTheme: Boolean = false,
+    enablePreferences: Boolean = false,
+    gotoPreferences: (() -> Unit)? = null,
+    backNavigateTo: (() -> Unit)? = null,
 ) {
+    onCommit {
+        Logger("BuildAppBar / onCommit")
+    }
+
+    onDispose {
+        Logger("BuildAppBar / onDispose")
+    }
+
     TopAppBar(
         title = {
             Text(
@@ -67,7 +82,15 @@ fun BuildAppBar(
         } else null,
         elevation = 0.dp,
         actions = {
-            BuildSwitchTheme()
+            if (enableSwitchTheme) {
+                BuildSwitchTheme()
+            }
+
+            gotoPreferences?.let {
+                if (enablePreferences) {
+                    BuildPreferences(it)
+                }
+            }
         }
     )
 }
@@ -88,5 +111,17 @@ fun BuildSwitchTheme() {
         Text(if (appThemeModel.isDark) "Light" else "Dark")
 
         Spacer(modifier = Modifier.width(16.dp))
+    }
+}
+
+@Composable
+fun BuildPreferences(gotoPreferences: () -> Unit) {
+    Row() {
+        IconButton(onClick = gotoPreferences) {
+            Icon(
+                imageVector = Icons.Outlined.Settings,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
     }
 }

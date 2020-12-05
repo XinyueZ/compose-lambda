@@ -18,6 +18,8 @@ package com.example.composelambda.appNav
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.onCommit
 import androidx.compose.runtime.onDispose
 import androidx.navigation.NavHostController
@@ -28,29 +30,59 @@ import androidx.navigation.compose.rememberNavController
 import com.example.composelambda.Logger
 import com.example.composelambda.pages.BuildDetailPage
 import com.example.composelambda.pages.BuildOverviewPage
+import com.example.composelambda.pages.BuildPreferencesPage
 import com.example.composelambda.pages.viewmodels.NewsViewModel
+import com.example.composelambda.pages.viewmodels.PreferencesViewModel
 
 @Composable
-fun NavigationContent(newsViewModel: NewsViewModel) {
-    val navCtrl: NavHostController = rememberNavController()
+fun NavigationContent(
+    newsViewModel: NewsViewModel,
+    preferencesViewModel: PreferencesViewModel,
+) {
     onCommit {
         Logger("Navigation-Content onCommit")
     }
+    val navCtrl: NavHostController = rememberNavController()
+    val isFollowSystemTheme by preferencesViewModel.followSystemTheme.collectAsState(initial = true)
+
     Crossfade(navCtrl.currentBackStackEntryAsState()) {
         NavHost(navCtrl, startDestination = OVERVIEW) {
             composable(OVERVIEW) {
                 Logger("OVERVIEW: ${it.destination.id}")
-                BuildOverviewPage(newsViewModel, Actions(navCtrl))
+                BuildOverviewPage(
+                    vm = newsViewModel,
+                    enableSwitchTheme = !isFollowSystemTheme,
+                    actions = Actions(navCtrl)
+                )
+            }
+
+            composable(PREFERENCES) {
+                Logger("PREFERENCES: ${it.destination.id}")
+                BuildPreferencesPage(
+                    vm = preferencesViewModel,
+                    enableSwitchTheme = !isFollowSystemTheme,
+                    actions = Actions(navCtrl)
+                )
             }
 
             composable("${NewsType.BreakingNews}") {
                 Logger("DETAIL BreakingNews: ${it.destination.id}")
-                BuildDetailPage(newsViewModel, NewsType.BreakingNews, Actions(navCtrl))
+                BuildDetailPage(
+                    vm = newsViewModel,
+                    enableSwitchTheme = !isFollowSystemTheme,
+                    newsType = NewsType.BreakingNews,
+                    actions = Actions(navCtrl)
+                )
             }
 
             composable("${NewsType.PremiumNews}") {
                 Logger("DETAIL PremiumNews: ${it.destination.id}")
-                BuildDetailPage(newsViewModel, NewsType.PremiumNews, Actions(navCtrl))
+                BuildDetailPage(
+                    vm = newsViewModel,
+                    enableSwitchTheme = !isFollowSystemTheme,
+                    newsType = NewsType.PremiumNews,
+                    actions = Actions(navCtrl)
+                )
             }
         }
     }

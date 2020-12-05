@@ -55,9 +55,12 @@ import com.example.composelambda.async.OnResult.OnSuccess
 import com.example.composelambda.pages.viewmodels.NewsViewModel
 import dev.chrisbanes.accompanist.coil.CoilImage
 
-@Suppress("UNCHECKED_CAST")
 @Composable
-fun BuildOverviewPage(vm: NewsViewModel, actions: Actions) {
+fun BuildOverviewPage(
+    vm: NewsViewModel,
+    enableSwitchTheme: Boolean,
+    actions: Actions
+) {
     onCommit {
         Logger("BuildOverviewPage / onCommit")
         vm.fetchPremiumNews()
@@ -71,7 +74,10 @@ fun BuildOverviewPage(vm: NewsViewModel, actions: Actions) {
     Scaffold(
         topBar = {
             BuildAppBar(
-                title = "News report"
+                title = "News report",
+                enablePreferences = true,
+                enableSwitchTheme = enableSwitchTheme,
+                gotoPreferences = actions.gotoPreferences,
             )
         },
         bodyContent = {
