@@ -26,12 +26,12 @@ import com.example.composelambda.domains.BreakingNews
 import com.example.composelambda.domains.PremiumNews
 import com.google.protobuf.InvalidProtocolBufferException
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.map
 import java.io.InputStream
 import java.io.OutputStream
 import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 
 interface NewsStorageRepository {
     suspend fun saveBreakingNews(breakingNews: BreakingNews)
@@ -72,10 +72,7 @@ class NewsStorageRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun savePremiumNews(
-        premiumNews:
-            PremiumNews
-    ) {
+    override suspend fun savePremiumNews(premiumNews: PremiumNews) {
         dataStore.updateData {
             it.toBuilder()
                 .setType(News.NewsType.PREMIUM_NEWS)
