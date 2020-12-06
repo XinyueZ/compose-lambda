@@ -47,7 +47,7 @@ class NewsRepositoryImpl implements NewsRepository {
 
     final jsonBox = jsonDecode(result.body) as Map<String, dynamic>;
     final breakingNews = BreakingNews.fromJson(jsonBox);
-    saveBreakingNews(breakingNews);
+    await saveBreakingNews(breakingNews);
     return Result.value(breakingNews);
   }
 
@@ -73,7 +73,7 @@ class NewsRepositoryImpl implements NewsRepository {
 
     final jsonBox = jsonDecode(result.body) as Map<String, dynamic>;
     final premiumNews = PremiumNews.fromJson(jsonBox);
-    savePremiumNews(premiumNews);
+    await savePremiumNews(premiumNews);
     return Result.value(premiumNews);
   }
 

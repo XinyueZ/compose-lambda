@@ -8,15 +8,21 @@ class NewsBloc extends ChangeNotifier {
   NewsBloc({
     @required NewsRepository newsRepository,
   })  : assert(newsRepository is NewsRepository),
-        _breakingNewsRepository = newsRepository;
+        _newsRepository = newsRepository;
 
-  final NewsRepository _breakingNewsRepository;
+  final NewsRepository _newsRepository;
 
   AsyncSnapshot<BreakingNews> breakingNewsState =
       const AsyncSnapshot<BreakingNews>.nothing();
 
   AsyncSnapshot<PremiumNews> premiumNewsState =
       const AsyncSnapshot<PremiumNews>.nothing();
+
+  AsyncSnapshot<Iterable<String>> breakingNewsDetail =
+      const AsyncSnapshot<Iterable<String>>.nothing();
+
+  AsyncSnapshot<Iterable<String>> premiumNewsDetail =
+      const AsyncSnapshot<Iterable<String>>.nothing();
 
   Future<void> fetchBreakingNews() async {
     breakingNewsState = const AsyncSnapshot<BreakingNews>.withData(
@@ -26,7 +32,7 @@ class NewsBloc extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final result = await _breakingNewsRepository.fetchBreakingNews();
+      final result = await _newsRepository.fetchBreakingNews();
       if (result.isError) {
         breakingNewsState = AsyncSnapshot<BreakingNews>.withError(
           ConnectionState.done,
@@ -58,7 +64,7 @@ class NewsBloc extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final result = await _breakingNewsRepository.fetchPremiumNews();
+      final result = await _newsRepository.fetchPremiumNews();
       if (result.isError) {
         premiumNewsState = AsyncSnapshot<PremiumNews>.withError(
           ConnectionState.done,
@@ -80,5 +86,33 @@ class NewsBloc extends ChangeNotifier {
     } finally {
       notifyListeners();
     }
+  }
+
+  Future<void> fetchBreakingNewsDetail() async {
+    final result = await _newsRepository.breakingNewsStorage;
+    final breakingNews = result.asValue.value;
+    breakingNewsDetail = AsyncSnapshot<Iterable<String>>.withData(
+      ConnectionState.done,
+      [
+        breakingNews.title,
+        breakingNews.description,
+        breakingNews.image,
+      ],
+    );
+    notifyListeners();
+  }
+
+  Future<void> fetchPremiumNewsDetail() async {
+    final result = await _newsRepository.premiumNewsStorage;
+    final premiumNews = result.asValue.value;
+    premiumNewsDetail = AsyncSnapshot<Iterable<String>>.withData(
+      ConnectionState.done,
+      [
+        premiumNews.title,
+        premiumNews.description,
+        premiumNews.image,
+      ],
+    );
+    notifyListeners();
   }
 }

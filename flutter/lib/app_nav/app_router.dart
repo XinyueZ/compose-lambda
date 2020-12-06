@@ -22,7 +22,7 @@ Route<dynamic> appRouter(RouteSettings settings) {
       return ScaleTransitionPageRoute<void>(
           settings: settings,
           builder: (BuildContext context) =>
-              DetailPage(title: "The guy, occupying the Oval"));
+              DetailPage(news: settings.arguments));
     default:
       throw Exception("Unexpected route ${settings.name}");
   }

@@ -22,7 +22,7 @@ class NewsStorageRepositoryImpl implements NewsStorageRepository {
   @override
   Future<void> saveBreakingNews(BreakingNews breakingNews) async {
     final box = await Hive.openBox<News>('news_storage');
-    box.put(0, breakingNews.toHive());
+    await box.put(0, breakingNews.toHive());
   }
 
   @override
@@ -35,6 +35,6 @@ class NewsStorageRepositoryImpl implements NewsStorageRepository {
   @override
   Future<void> savePremiumNews(PremiumNews premiumNews) async {
     final box = await Hive.openBox<News>('news_storage');
-    box.put(1, premiumNews.toHive());
+    await box.put(1, premiumNews.toHive());
   }
 }

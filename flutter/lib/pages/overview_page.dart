@@ -69,17 +69,7 @@ class _OverviewPageState extends State<OverviewPage> {
       ),
       color: Theme.of(context).cardTheme.color,
       elevation: 5,
-      child: InkWell(
-        child: content,
-        onTap: () {
-          Navigator.of(
-            context,
-            rootNavigator: true,
-          ).pushNamed(
-            DETAIL,
-          );
-        },
-      ),
+      child: content,
     );
   }
 
@@ -100,11 +90,11 @@ class _OverviewPageState extends State<OverviewPage> {
               },
             ),
             Expanded(
-              child: Text(
-                breakingNewsState.error.toString(),
-                textAlign: TextAlign.start,
-                style: Theme.of(context).textTheme.subtitle1,
-              ),
+              child: Text(breakingNewsState.error.toString(),
+                  textAlign: TextAlign.start,
+                  style: Theme.of(context).textTheme.subtitle1.copyWith(
+                        color: Colors.white,
+                      )),
             ),
           ],
         );
@@ -125,24 +115,29 @@ class _OverviewPageState extends State<OverviewPage> {
             ),
           );
         case ConnectionState.done:
-          return Row(
-            children: <Widget>[
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: Image.network(
-                  breakingNewsState.data.image,
-                  width: 120,
+          return InkWell(
+            onTap: () {
+              _gotoDetail(breakingNewsState.data);
+            },
+            child: Row(
+              children: <Widget>[
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Image.network(
+                    breakingNewsState.data.image,
+                    width: 120,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Text(breakingNewsState.data.title,
-                    textAlign: TextAlign.start,
-                    style: Theme.of(context).textTheme.subtitle1.copyWith(
-                          color: Colors.white,
-                        )),
-              ),
-            ],
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(breakingNewsState.data.title,
+                      textAlign: TextAlign.start,
+                      style: Theme.of(context).textTheme.subtitle1.copyWith(
+                            color: Colors.white,
+                          )),
+                ),
+              ],
+            ),
           );
         default:
           return const SizedBox.shrink();
@@ -173,11 +168,11 @@ class _OverviewPageState extends State<OverviewPage> {
               },
             ),
             Expanded(
-              child: Text(
-                premiumNewsState.error.toString(),
-                textAlign: TextAlign.start,
-                style: Theme.of(context).textTheme.subtitle1,
-              ),
+              child: Text(premiumNewsState.error.toString(),
+                  textAlign: TextAlign.start,
+                  style: Theme.of(context).textTheme.subtitle1.copyWith(
+                        color: Colors.white,
+                      )),
             ),
           ],
         );
@@ -198,24 +193,29 @@ class _OverviewPageState extends State<OverviewPage> {
             ),
           );
         case ConnectionState.done:
-          return Row(
-            children: <Widget>[
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: Image.network(
-                  premiumNewsState.data.image,
-                  width: 120,
+          return InkWell(
+            onTap: () {
+              _gotoDetail(premiumNewsState.data);
+            },
+            child: Row(
+              children: <Widget>[
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Image.network(
+                    premiumNewsState.data.image,
+                    width: 120,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Text(premiumNewsState.data.title,
-                    textAlign: TextAlign.start,
-                    style: Theme.of(context).textTheme.subtitle1.copyWith(
-                          color: Colors.white,
-                        )),
-              ),
-            ],
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(premiumNewsState.data.title,
+                      textAlign: TextAlign.start,
+                      style: Theme.of(context).textTheme.subtitle1.copyWith(
+                            color: Colors.white,
+                          )),
+                ),
+              ],
+            ),
           );
         default:
           return const SizedBox.shrink();
@@ -228,5 +228,15 @@ class _OverviewPageState extends State<OverviewPage> {
           color: Theme.of(context).colorScheme.secondaryVariant,
           borderRadius: BorderRadius.circular((8.0)),
         ));
+  }
+
+  void _gotoDetail(dynamic data) {
+    Navigator.of(
+      context,
+      rootNavigator: true,
+    ).pushNamed(
+      DETAIL,
+      arguments: data,
+    );
   }
 }
