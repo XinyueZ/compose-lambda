@@ -7,6 +7,7 @@ import 'package:flutter_compose_lambda/domains/breaking_news.dart';
 import 'package:flutter_compose_lambda/domains/premium_news.dart';
 import 'package:flutter_compose_lambda/pages/app_bar.dart';
 import 'package:flutter_compose_lambda/pages/blocs/news_bloc.dart';
+import 'package:flutter_compose_lambda/pages/blocs/preferences_bloc.dart';
 import 'package:provider/provider.dart';
 
 class DetailPage extends StatefulWidget {
@@ -57,7 +58,9 @@ class _DetailPageState extends State<DetailPage> {
     return Scaffold(
       appBar: TopAppBar(
         context: context,
-        title: _parseNewsDetail().first, //widget.title,
+        title: _parseNewsDetail().first,
+        enablePreferences: true,
+        enableSwitchTheme: !PreferencesBloc.isFollowSystemTheme(context),
       ),
       body: _buildBody(context),
     );

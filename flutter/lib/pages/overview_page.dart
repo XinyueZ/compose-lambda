@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_compose_lambda/app_nav/nav_const.dart';
 import 'package:flutter_compose_lambda/pages/app_bar.dart';
 import 'package:flutter_compose_lambda/pages/blocs/news_bloc.dart';
+import 'package:flutter_compose_lambda/pages/blocs/preferences_bloc.dart';
 import 'package:provider/provider.dart';
 
 class OverviewPage extends StatefulWidget {
@@ -35,6 +36,8 @@ class _OverviewPageState extends State<OverviewPage> {
       appBar: TopAppBar(
         context: context,
         title: widget.title,
+        enablePreferences: true,
+        enableSwitchTheme: !PreferencesBloc.isFollowSystemTheme(context),
       ),
       body: _buildBody(context),
     );

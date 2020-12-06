@@ -15,7 +15,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
   @override
   void initState() {
     super.initState();
-    scheduleMicrotask(() {
+    scheduleMicrotask(() async {
       Provider.of<PreferencesBloc>(context, listen: false)
           .fetchFollowSystemTheme();
     });
@@ -26,7 +26,9 @@ class _PreferencesPageState extends State<PreferencesPage> {
     return Scaffold(
       appBar: TopAppBar(
         context: context,
-        title: "Preferences", //widget.title,
+        title: "Preferences",
+        enablePreferences: false,
+        enableSwitchTheme: !PreferencesBloc.isFollowSystemTheme(context),
       ),
       body: _buildBody(context),
     );
@@ -41,8 +43,13 @@ class _PreferencesPageState extends State<PreferencesPage> {
             style: Theme.of(context).textTheme.subtitle1,
           ),
           trailing: Switch(
-            value: true,
-            onChanged: (final bool value) {},
+            value: PreferencesBloc.isFollowSystemTheme(context),
+            onChanged: (final bool value) {
+              Provider.of<PreferencesBloc>(
+                context,
+                listen: false,
+              ).setFollowSystemTheme(value);
+            },
           ),
         )
       ],

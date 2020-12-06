@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_compose_lambda/repositories/preferences_repository.dart';
+import 'package:provider/provider.dart';
 
 class PreferencesBloc extends ChangeNotifier {
   PreferencesBloc({
@@ -24,4 +25,8 @@ class PreferencesBloc extends ChangeNotifier {
     await _preferencesRepository.setFollowSystemTheme(value);
     fetchFollowSystemTheme();
   }
+
+  static bool isFollowSystemTheme(BuildContext context) =>
+      Provider.of<PreferencesBloc>(context).followSystemTheme.hasData &&
+      Provider.of<PreferencesBloc>(context).followSystemTheme.data;
 }

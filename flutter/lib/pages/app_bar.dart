@@ -7,7 +7,13 @@ class TopAppBar extends AppBar {
   TopAppBar({
     @required BuildContext context,
     @required String title,
-  }) : super(
+    @required bool enableSwitchTheme,
+    @required bool enablePreferences,
+  })  : assert(context is BuildContext),
+        assert(title is String),
+        assert(enableSwitchTheme is bool),
+        assert(enablePreferences is bool),
+        super(
             title: Text(
               title,
               maxLines: 1,
@@ -16,8 +22,8 @@ class TopAppBar extends AppBar {
               style: Theme.of(context).textTheme.headline6,
             ),
             actions: <Widget>[
-              _buildSwitchTheme(context),
-              _buildPreferences(context),
+              if (enableSwitchTheme) _buildSwitchTheme(context),
+              if (enablePreferences) _buildPreferences(context),
             ]);
 
   static Widget _buildSwitchTheme(BuildContext context) {
