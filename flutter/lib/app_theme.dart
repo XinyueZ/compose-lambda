@@ -31,25 +31,19 @@ class _ThemeAppState extends State<ThemeApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ListenableProvider<AppThemeModel>(
-      create: (_) => AppThemeModel(),
-      builder: (BuildContext context, Widget _) {
-        final isDarkTheme = Provider.of<AppThemeModel>(context).isDark;
-        final isFollowSystemTheme =
-            PreferencesBloc.isFollowSystemTheme(context);
-        var themeMode = isDarkTheme ? ThemeMode.dark : ThemeMode.light;
-        if (isFollowSystemTheme) {
-          themeMode = ThemeMode.system;
-        }
-        return MaterialApp(
-          theme: _appLightTheme,
-          darkTheme: _appDarkTheme,
-          themeMode: themeMode,
-          onGenerateRoute: appRouter,
-          onGenerateTitle: (context) => "News report",
-          home: widget.child,
-        );
-      },
+    final isDarkTheme = Provider.of<AppThemeModel>(context).isDark;
+    final isFollowSystemTheme = PreferencesBloc.isFollowSystemTheme(context);
+    var themeMode = isDarkTheme ? ThemeMode.dark : ThemeMode.light;
+    if (isFollowSystemTheme) {
+      themeMode = ThemeMode.system;
+    }
+    return MaterialApp(
+      theme: _appLightTheme,
+      darkTheme: _appDarkTheme,
+      themeMode: themeMode,
+      onGenerateRoute: appRouter,
+      onGenerateTitle: (context) => "News report",
+      home: widget.child,
     );
   }
 }

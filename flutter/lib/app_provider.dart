@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_compose_lambda/app_theme.dart';
 import 'package:flutter_compose_lambda/network/network_module.dart';
 import 'package:flutter_compose_lambda/pages/page_module.dart';
 import 'package:flutter_compose_lambda/repositories/repository_module.dart';
@@ -15,6 +16,7 @@ class AppProvider extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: <SingleChildWidget>[
+        ListenableProvider<AppThemeModel>(create: (_) => AppThemeModel()),
         ...networkModule,
         ...repositoryModule,
         ...pageModule,
