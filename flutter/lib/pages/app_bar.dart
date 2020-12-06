@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_compose_lambda/app_nav/nav_const.dart';
 import 'package:flutter_compose_lambda/app_theme.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +17,7 @@ class TopAppBar extends AppBar {
             ),
             actions: <Widget>[
               _buildSwitchTheme(context),
+              _buildPreferences(context),
             ]);
 
   static Widget _buildSwitchTheme(BuildContext context) {
@@ -44,5 +46,16 @@ class TopAppBar extends AppBar {
         const SizedBox(width: 16),
       ],
     );
+  }
+
+  static Widget _buildPreferences(BuildContext context) {
+    return IconButton(
+        icon: Icon(Icons.settings),
+        onPressed: () {
+          Navigator.of(
+            context,
+            rootNavigator: true,
+          ).pushNamed(PREFERENCES);
+        });
   }
 }

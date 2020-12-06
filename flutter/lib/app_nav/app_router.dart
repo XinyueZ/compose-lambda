@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_compose_lambda/app_nav/nav_const.dart';
 import 'package:flutter_compose_lambda/pages/detail_page.dart';
 import 'package:flutter_compose_lambda/pages/overview_page.dart';
+import 'package:flutter_compose_lambda/pages/preferences_page.dart';
 import 'package:flutter_compose_lambda/transitions/customized_transition_route.dart';
 
 Route<dynamic> appRouter(RouteSettings settings) {
@@ -23,6 +24,12 @@ Route<dynamic> appRouter(RouteSettings settings) {
           settings: settings,
           builder: (BuildContext context) =>
               DetailPage(news: settings.arguments));
+    case PREFERENCES:
+
+      ///[SlideTransitionPageRoute] or nothing to animate with [NoTransitionPageRoute]
+      return SlideTransitionPageRoute<void>(
+          settings: settings,
+          builder: (BuildContext context) => PreferencesPage());
     default:
       throw Exception("Unexpected route ${settings.name}");
   }

@@ -12,22 +12,24 @@ abstract class NewsStorageRepository {
 }
 
 class NewsStorageRepositoryImpl implements NewsStorageRepository {
+  static const String kNewsStorage = "news_storage";
+
   @override
   Future<Result<BreakingNews>> get breakingNewsStorage async {
-    final box = await Hive.openBox<News>('news_storage');
+    final box = await Hive.openBox<News>(kNewsStorage);
     final news = box.get(0); // 0 is breaking-news
     return ValueResult(BreakingNews.fromHive(news));
   }
 
   @override
   Future<void> saveBreakingNews(BreakingNews breakingNews) async {
-    final box = await Hive.openBox<News>('news_storage');
+    final box = await Hive.openBox<News>(kNewsStorage);
     await box.put(0, breakingNews.toHive());
   }
 
   @override
   Future<Result<PremiumNews>> get premiumNewsStorage async {
-    final box = await Hive.openBox<News>('news_storage');
+    final box = await Hive.openBox<News>(kNewsStorage);
     final news = box.get(1); // 0 is premium-news
     return ValueResult(PremiumNews.fromHive(news));
   }
