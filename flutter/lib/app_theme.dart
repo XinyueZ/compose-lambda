@@ -1,33 +1,15 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_compose_lambda/app_nav/app_router.dart';
 import 'package:flutter_compose_lambda/pages/blocs/preferences_bloc.dart';
 import 'package:provider/provider.dart';
 
-class ThemeApp extends StatefulWidget {
+class ThemeApp extends StatelessWidget {
   const ThemeApp({
     this.child,
   });
 
   final Widget child;
-
-  @override
-  _ThemeAppState createState() => _ThemeAppState();
-}
-
-class _ThemeAppState extends State<ThemeApp> {
-  @override
-  void initState() {
-    super.initState();
-    scheduleMicrotask(() async {
-      Provider.of<PreferencesBloc>(
-        context,
-        listen: false,
-      ).fetchFollowSystemTheme();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +25,7 @@ class _ThemeAppState extends State<ThemeApp> {
       themeMode: themeMode,
       onGenerateRoute: appRouter,
       onGenerateTitle: (context) => "News report",
-      home: widget.child,
+      home: child,
     );
   }
 }

@@ -7,7 +7,9 @@ class PreferencesBloc extends ChangeNotifier {
   PreferencesBloc({
     @required PreferencesRepository preferencesRepository,
   })  : assert(preferencesRepository is PreferencesRepository),
-        _preferencesRepository = preferencesRepository;
+        _preferencesRepository = preferencesRepository {
+    fetchFollowSystemTheme();
+  }
 
   final PreferencesRepository _preferencesRepository;
 
