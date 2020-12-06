@@ -6,8 +6,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_compose_lambda/domains/breaking_news.dart';
 import 'package:flutter_compose_lambda/domains/premium_news.dart';
 import 'package:flutter_compose_lambda/network/rest_client.dart';
+import 'package:flutter_compose_lambda/repositories/news_storage_repository.dart';
 
-abstract class NewsRepository {
+abstract class NewsRepository extends NewsStorageRepository {
   Future<Result<PremiumNews>> fetchPremiumNews();
   Future<Result<BreakingNews>> fetchBreakingNews();
 }
@@ -15,10 +16,14 @@ abstract class NewsRepository {
 class NewsRepositoryImpl implements NewsRepository {
   const NewsRepositoryImpl({
     @required RestClient restClient,
+    @required NewsStorageRepository newsStorageRepository,
   })  : assert(restClient is RestClient),
-        _restClient = restClient;
+        assert(newsStorageRepository is NewsStorageRepository),
+        _restClient = restClient,
+        _newsStorageRepository = newsStorageRepository;
 
   final RestClient _restClient;
+  final NewsStorageRepository _newsStorageRepository;
 
   @override
   Future<Result<BreakingNews>> fetchBreakingNews() async {
@@ -41,7 +46,9 @@ class NewsRepositoryImpl implements NewsRepository {
     }
 
     final jsonBox = jsonDecode(result.body) as Map<String, dynamic>;
-    return Result.value(BreakingNews.fromJson(jsonBox));
+    final breakingNews = BreakingNews.fromJson(jsonBox);
+    saveBreakingNews(breakingNews);
+    return Result.value(breakingNews);
   }
 
   @override
@@ -65,6 +72,25 @@ class NewsRepositoryImpl implements NewsRepository {
     }
 
     final jsonBox = jsonDecode(result.body) as Map<String, dynamic>;
-    return Result.value(PremiumNews.fromJson(jsonBox));
+    final premiumNews = PremiumNews.fromJson(jsonBox);
+    savePremiumNews(premiumNews);
+    return Result.value(premiumNews);
+  }
+
+  @override
+  Future<Result<BreakingNews>> get breakingNewsStorage async =>
+      _newsStorageRepository.breakingNewsStorage;
+  @override
+  Future<void> saveBreakingNews(BreakingNews breakingNews) async {
+    _newsStorageRepository.saveBreakingNews(breakingNews);
+  }
+
+  @override
+  Future<Result<PremiumNews>> get premiumNewsStorage async =>
+      _newsStorageRepository.premiumNewsStorage;
+
+  @override
+  Future<void> savePremiumNews(PremiumNews premiumNews) async {
+    _newsStorageRepository.savePremiumNews(premiumNews);
   }
 }

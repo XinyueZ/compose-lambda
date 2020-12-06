@@ -99,10 +99,12 @@ class _OverviewPageState extends State<OverviewPage> {
                     .fetchBreakingNews();
               },
             ),
-            Text(
-              breakingNewsState.error.toString(),
-              textAlign: TextAlign.start,
-              style: Theme.of(context).textTheme.subtitle1,
+            Expanded(
+              child: Text(
+                breakingNewsState.error.toString(),
+                textAlign: TextAlign.start,
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
             ),
           ],
         );
@@ -170,10 +172,12 @@ class _OverviewPageState extends State<OverviewPage> {
                     .fetchPremiumNews();
               },
             ),
-            Text(
-              premiumNewsState.error.toString(),
-              textAlign: TextAlign.start,
-              style: Theme.of(context).textTheme.subtitle1,
+            Expanded(
+              child: Text(
+                premiumNewsState.error.toString(),
+                textAlign: TextAlign.start,
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
             ),
           ],
         );
