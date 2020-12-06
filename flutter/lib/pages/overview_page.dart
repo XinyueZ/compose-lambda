@@ -23,7 +23,7 @@ class _OverviewPageState extends State<OverviewPage> {
   @override
   void initState() {
     super.initState();
-    scheduleMicrotask(() {
+    scheduleMicrotask(() async {
       Provider.of<NewsBloc>(context, listen: false).fetchBreakingNews();
       Provider.of<NewsBloc>(context, listen: false).fetchPremiumNews();
     });
