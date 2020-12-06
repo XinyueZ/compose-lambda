@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_compose_lambda/app_nav/app_router.dart';
+import 'package:flutter_compose_lambda/pages/blocs/preferences_bloc.dart';
 import 'package:provider/provider.dart';
 
-class ThemeApp extends StatelessWidget {
+class ThemeApp extends StatefulWidget {
   const ThemeApp({
     this.child,
   });
@@ -11,16 +14,40 @@ class ThemeApp extends StatelessWidget {
   final Widget child;
 
   @override
+  _ThemeAppState createState() => _ThemeAppState();
+}
+
+class _ThemeAppState extends State<ThemeApp> {
+  @override
+  void initState() {
+    super.initState();
+    scheduleMicrotask(() async {
+      Provider.of<PreferencesBloc>(
+        context,
+        listen: false,
+      ).fetchFollowSystemTheme();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ListenableProvider<AppThemeModel>(
       create: (_) => AppThemeModel(),
-      builder: (BuildContext context, Widget widget) {
-        final isDark = Provider.of<AppThemeModel>(context).isDark;
+      builder: (BuildContext context, Widget _) {
+        final isDarkTheme = Provider.of<AppThemeModel>(context).isDark;
+        final isFollowSystemTheme =
+            PreferencesBloc.isFollowSystemTheme(context);
+        var themeMode = isDarkTheme ? ThemeMode.dark : ThemeMode.light;
+        if (isFollowSystemTheme) {
+          themeMode = ThemeMode.system;
+        }
         return MaterialApp(
-          theme: isDark ? _appDarkTheme : _appLightTheme,
+          theme: _appLightTheme,
+          darkTheme: _appDarkTheme,
+          themeMode: themeMode,
           onGenerateRoute: appRouter,
           onGenerateTitle: (context) => "News report",
-          home: child,
+          home: widget.child,
         );
       },
     );
