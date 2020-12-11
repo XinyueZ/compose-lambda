@@ -69,7 +69,7 @@ fun BuildDetailPage(
         Logger("BuildDetailPage / onDispose")
     }
 
-    val detailContent = vm.parserNewsDetail(newsType)
+    val detailContent = vm.parseNewsDetail(newsType)
 
     var fontSizeDelta by remember { mutableStateOf(0) }
 
@@ -153,7 +153,7 @@ fun BuildDetailPage(
 }
 
 @Composable
-fun NewsViewModel.parserNewsDetail(newsType: NewsType): Array<String> {
+fun NewsViewModel.parseNewsDetail(newsType: NewsType): Array<String> {
     return when (newsType) {
         NewsType.BreakingNews -> {
             val content by breakingNewsDetail.collectAsState(initial = BreakingNews.default)
