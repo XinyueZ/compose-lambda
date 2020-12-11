@@ -98,7 +98,7 @@ fun BuildAppBar(
 @Composable
 fun BuildSwitchTheme() {
     val appThemeModel: AppThemeModel = viewModel(factory = AppThemeModelFactory)
-    Row() {
+    Row {
         Switch(
             checked = appThemeModel.isDark,
             onCheckedChange = {
@@ -116,12 +116,10 @@ fun BuildSwitchTheme() {
 
 @Composable
 fun BuildPreferences(gotoPreferences: () -> Unit) {
-    Row() {
-        IconButton(onClick = gotoPreferences) {
-            Icon(
-                imageVector = Icons.Outlined.Settings,
-                modifier = Modifier.fillMaxSize()
-            )
-        }
+    IconButton(onClick = gotoPreferences) {
+        Icon(
+            imageVector = Icons.Outlined.Settings,
+            modifier = Modifier.fillMaxSize()
+        )
     }
 }
