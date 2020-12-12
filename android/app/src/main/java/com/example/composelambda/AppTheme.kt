@@ -50,8 +50,10 @@ fun AppTheme(
 
     val followSystemTheme by preferencesViewModel.followSystemTheme.collectAsState(initial = true)
     val appThemeModel: AppThemeModel = viewModel(factory = AppThemeModelFactory)
-    val isDarkTheme = (followSystemTheme && defaultDarkTheme) ||
-        appThemeModel.isDark
+    var isDarkTheme = appThemeModel.isDark
+    if (followSystemTheme) {
+        isDarkTheme = defaultDarkTheme
+    }
 
     val themeData = if (isDarkTheme) appDarkTheme() else appLightTheme()
     MaterialTheme(colors = themeData) {
