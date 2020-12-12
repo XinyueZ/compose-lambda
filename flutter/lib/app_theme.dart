@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_compose_lambda/app_nav/app_router.dart';
+import 'package:flutter_compose_lambda/pages/blocs/preferences_bloc.dart';
 import 'package:provider/provider.dart';
 
 class ThemeApp extends StatelessWidget {
@@ -12,17 +13,19 @@ class ThemeApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListenableProvider<AppThemeModel>(
-      create: (_) => AppThemeModel(),
-      builder: (BuildContext context, Widget widget) {
-        final isDark = Provider.of<AppThemeModel>(context).isDark;
-        return MaterialApp(
-          theme: isDark ? _appDarkTheme : _appLightTheme,
-          onGenerateRoute: appRouter,
-          onGenerateTitle: (context) => "News report",
-          home: child,
-        );
-      },
+    final isDarkTheme = Provider.of<AppThemeModel>(context).isDark;
+    final isFollowSystemTheme = PreferencesBloc.isFollowSystemTheme(context);
+    var themeMode = isDarkTheme ? ThemeMode.dark : ThemeMode.light;
+    if (isFollowSystemTheme) {
+      themeMode = ThemeMode.system;
+    }
+    return MaterialApp(
+      theme: _appLightTheme,
+      darkTheme: _appDarkTheme,
+      themeMode: themeMode,
+      onGenerateRoute: appRouter,
+      onGenerateTitle: (context) => "News report",
+      home: child,
     );
   }
 }

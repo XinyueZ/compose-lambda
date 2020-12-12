@@ -1,11 +1,11 @@
 import 'package:flutter_compose_lambda/hive_models/news.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'breaking_news.g.dart';
+part 'premium_news.g.dart';
 
 @JsonSerializable()
-class BreakingNews {
-  const BreakingNews({
+class PremiumNews {
+  const PremiumNews({
     this.title,
     this.description,
     this.image,
@@ -14,18 +14,18 @@ class BreakingNews {
   final String description;
   final String image;
 
-  factory BreakingNews.fromHive(News news) => BreakingNews(
+  factory PremiumNews.fromHive(News news) => PremiumNews(
         title: news.title,
         description: news.description,
         image: news.image,
       );
   News toHive() => News()
-    ..type = 0
+    ..type = 1
     ..title = title
     ..description = description
     ..image = image;
 
-  factory BreakingNews.fromJson(Map<String, dynamic> json) =>
-      _$BreakingNewsFromJson(json);
-  Map<String, dynamic> toJson() => _$BreakingNewsToJson(this);
+  factory PremiumNews.fromJson(Map<String, dynamic> json) =>
+      _$PremiumNewsFromJson(json);
+  Map<String, dynamic> toJson() => _$PremiumNewsToJson(this);
 }

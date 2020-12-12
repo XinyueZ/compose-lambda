@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_compose_lambda/app_nav/nav_const.dart';
 import 'package:flutter_compose_lambda/app_theme.dart';
 import 'package:provider/provider.dart';
 
@@ -6,7 +7,13 @@ class TopAppBar extends AppBar {
   TopAppBar({
     @required BuildContext context,
     @required String title,
-  }) : super(
+    @required bool enableSwitchTheme,
+    @required bool enablePreferences,
+  })  : assert(context is BuildContext),
+        assert(title is String),
+        assert(enableSwitchTheme is bool),
+        assert(enablePreferences is bool),
+        super(
             title: Text(
               title,
               maxLines: 1,
@@ -15,7 +22,8 @@ class TopAppBar extends AppBar {
               style: Theme.of(context).textTheme.headline6,
             ),
             actions: <Widget>[
-              _buildSwitchTheme(context),
+              if (enableSwitchTheme) _buildSwitchTheme(context),
+              if (enablePreferences) _buildPreferences(context),
             ]);
 
   static Widget _buildSwitchTheme(BuildContext context) {
@@ -44,5 +52,16 @@ class TopAppBar extends AppBar {
         const SizedBox(width: 16),
       ],
     );
+  }
+
+  static Widget _buildPreferences(BuildContext context) {
+    return IconButton(
+        icon: Icon(Icons.settings),
+        onPressed: () {
+          Navigator.of(
+            context,
+            rootNavigator: true,
+          ).pushNamed(PREFERENCES);
+        });
   }
 }
