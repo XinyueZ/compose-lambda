@@ -20,20 +20,44 @@ import com.example.composelambda.async.OnResult
 import com.example.composelambda.async.onError
 import com.example.composelambda.async.onSuccess
 import com.example.composelambda.domains.BreakingNews
+import com.example.composelambda.domains.PremiumNews
 import com.example.composelambda.network.NewsService
+import java.lang.System.currentTimeMillis
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import java.lang.System.currentTimeMillis
-import javax.inject.Inject
 
-interface BreakingNewsRepository {
+interface NewsRepository : NewsStorageRepository {
+    fun fetchPremiumNews(): Flow<OnResult<PremiumNews>>
     fun fetchBreakingNews(): Flow<OnResult<BreakingNews>>
 }
 
-class BreakingNewsRepositoryImpl @Inject constructor(private val newsService: NewsService) :
-    BreakingNewsRepository {
+class NewsRepositoryImpl @Inject constructor(
+    private val newsService: NewsService,
+    newsStorageRepository: NewsStorageRepository,
+) : NewsRepository, NewsStorageRepository by newsStorageRepository {
+
+    override fun fetchPremiumNews(): Flow<OnResult<PremiumNews>> {
+        return flow {
+            when {
+                currentTimeMillis() % 3 == 0 -> {
+                    // Some logic errors to cause exception
+                    emit(IllegalArgumentException("Cannot fetch data.").onError(PremiumNews.empty))
+                }
+                currentTimeMillis() % 5 == 0 -> {
+                    // Some internal fatal errors
+                    throw IllegalArgumentException("Fatal issue!")
+                }
+                else -> {
+                    // Give the response wrapper out
+                    savePremiumNews(newsService.getPremiumNews())
+                    emit(newsService.getPremiumNews().onSuccess())
+                }
+            }
+        }.flowOn(Dispatchers.IO) // Use the IO thread for this Flow
+    }
 
     override fun fetchBreakingNews(): Flow<OnResult<BreakingNews>> {
         return flow {
@@ -48,6 +72,7 @@ class BreakingNewsRepositoryImpl @Inject constructor(private val newsService: Ne
                 }
                 else -> {
                     // Give the response wrapper out
+                    saveBreakingNews(newsService.getBreakingNews())
                     emit(newsService.getBreakingNews().onSuccess())
                 }
             }

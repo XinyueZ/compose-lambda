@@ -14,8 +14,28 @@
  * limitations under the License.
  */
 
-package com.example.composelambda.appNav
+package com.example.composelambda.domains
+// import kotlinx.serialization.Serializable
 
-const val OVERVIEW = "overview"
-const val DETAIL = "detail"
-const val PREFERENCES = "preferences"
+// @Serializable
+data class PremiumNews(
+    val title: String,
+    val description: String,
+    val image: String
+) {
+    companion object {
+        @JvmStatic
+        val default = PremiumNews(
+            "Premium News",
+            "Hi, this is the premium news",
+            "https://dl.dropboxusercontent.com/s/k0ujkp3ti368z4x/trump_dump.png"
+        )
+
+        @JvmStatic
+        val empty = PremiumNews(
+            "",
+            "",
+            ""
+        )
+    }
+}
