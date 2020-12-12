@@ -17,30 +17,47 @@
 package com.example.composelambda.pages
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.preferredWidth
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.onCommit
+import androidx.compose.runtime.onDispose
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.viewModel
 import com.example.composelambda.AppThemeModel
 import com.example.composelambda.AppThemeModelFactory
-import com.example.composelambda.R
+import com.example.composelambda.Logger
 
 @Composable
 fun BuildAppBar(
     title: String,
-    backNavigateTo: (() -> Unit)? = null
+    enableSwitchTheme: Boolean = false,
+    enablePreferences: Boolean = false,
+    gotoPreferences: (() -> Unit)? = null,
+    backNavigateTo: (() -> Unit)? = null,
 ) {
+    onCommit {
+        Logger("BuildAppBar / onCommit")
+    }
+
+    onDispose {
+        Logger("BuildAppBar / onDispose")
+    }
+
     TopAppBar(
         title = {
             Text(
@@ -57,7 +74,7 @@ fun BuildAppBar(
             {
                 IconButton(onClick = backNavigateTo) {
                     Icon(
-                        vectorResource(R.drawable.ic_back),
+                        imageVector = Icons.Outlined.ArrowBack,
                         modifier = Modifier.fillMaxSize()
                     )
                 }
@@ -65,7 +82,15 @@ fun BuildAppBar(
         } else null,
         elevation = 0.dp,
         actions = {
-            BuildSwitchTheme()
+            if (enableSwitchTheme) {
+                BuildSwitchTheme()
+            }
+
+            gotoPreferences?.let {
+                if (enablePreferences) {
+                    BuildPreferences(it)
+                }
+            }
         }
     )
 }
@@ -73,7 +98,7 @@ fun BuildAppBar(
 @Composable
 fun BuildSwitchTheme() {
     val appThemeModel: AppThemeModel = viewModel(factory = AppThemeModelFactory)
-    Row() {
+    Row {
         Switch(
             checked = appThemeModel.isDark,
             onCheckedChange = {
@@ -81,10 +106,20 @@ fun BuildSwitchTheme() {
             }
         )
 
-        Spacer(modifier = Modifier.preferredWidthIn(10.dp))
+        Spacer(modifier = Modifier.width(10.dp))
 
         Text(if (appThemeModel.isDark) "Light" else "Dark")
 
-        Spacer(modifier = Modifier.preferredWidthIn(16.dp))
+        Spacer(modifier = Modifier.width(16.dp))
+    }
+}
+
+@Composable
+fun BuildPreferences(gotoPreferences: () -> Unit) {
+    IconButton(onClick = gotoPreferences) {
+        Icon(
+            imageVector = Icons.Outlined.Settings,
+            modifier = Modifier.fillMaxSize()
+        )
     }
 }

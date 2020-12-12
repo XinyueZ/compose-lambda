@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'kotlinx-serialization'
     id 'dagger.hilt.android.plugin'
+    id "com.google.protobuf" version "0.8.13"
 }
 
 android {
@@ -16,13 +17,13 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-
+        vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -35,7 +36,6 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
         allWarningsAsErrors = true
-//        useIR = true
     }
 
     buildFeatures {
@@ -55,19 +55,20 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-    implementation "androidx.compose.runtime:runtime:$compose_version"
     implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.foundation:foundation-layout:$compose_version"
+    implementation "androidx.compose.ui:ui-util:$compose_version"
+    implementation "androidx.compose.runtime:runtime:$compose_version"
+    implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
+    implementation "androidx.compose.ui:ui-tooling:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
-    implementation "androidx.compose.foundation:foundation:$compose_version"
     implementation "androidx.compose.animation:animation:$compose_version"
-    implementation "androidx.ui:ui-tooling:$compose_version"
-    implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
+    implementation "androidx.compose.foundation:foundation:$compose_version"
+    implementation "androidx.compose.foundation:foundation-layout:$compose_version"
 
-    implementation "androidx.navigation:navigation-compose:1.0.0-alpha02"
-    implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
+    implementation "androidx.navigation:navigation-compose:1.0.0-alpha03"
 
     implementation 'androidx.appcompat:appcompat:1.3.0-alpha02'
     implementation 'androidx.activity:activity-ktx:1.1.0'
@@ -82,8 +83,12 @@ dependencies {
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_co_version"
     kapt "androidx.hilt:hilt-compiler:$hilt_co_version"
 
-    implementation 'dev.chrisbanes.accompanist:accompanist-coil:0.3.3.1'
+    implementation 'dev.chrisbanes.accompanist:accompanist-coil:0.3.4.compose-7001724-SNAPSHOT'
 
+    implementation "androidx.datastore:datastore:$datastore_version"
+    implementation  "androidx.datastore:datastore-core:$datastore_version"
+    implementation "androidx.datastore:datastore-preferences:$datastore_version"
+    implementation  "com.google.protobuf:protobuf-javalite:3.11.0"
 
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
     implementation 'com.google.code.gson:gson:2.8.6'
@@ -95,7 +100,25 @@ dependencies {
     androidTestImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test:rules:1.3.0'
     androidTestImplementation 'androidx.test:runner:1.3.0'
-    androidTestImplementation "androidx.ui:ui-test:$compose_version"
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.11.0"
+    }
+
+    // Generates the java Protobuf-lite code for the Protobufs in this project. See
+    // https://github.com/google/protobuf-gradle-plugin#customizing-protobuf-compilation
+    // for more information.
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                java {
+                    option 'lite'
+                }
+            }
+        }
+    }
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
