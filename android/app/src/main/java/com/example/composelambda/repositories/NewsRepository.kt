@@ -22,13 +22,12 @@ import com.example.composelambda.async.onSuccess
 import com.example.composelambda.domains.BreakingNews
 import com.example.composelambda.domains.PremiumNews
 import com.example.composelambda.network.NewsService
+import java.lang.System.currentTimeMillis
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.withContext
-import java.lang.System.currentTimeMillis
-import javax.inject.Inject
 
 interface NewsRepository : NewsStorageRepository {
     fun fetchPremiumNews(): Flow<OnResult<PremiumNews>>
@@ -53,9 +52,7 @@ class NewsRepositoryImpl @Inject constructor(
                 }
                 else -> {
                     // Give the response wrapper out
-                    withContext(Dispatchers.Default) {
-                        savePremiumNews(newsService.getPremiumNews())
-                    }
+                    savePremiumNews(newsService.getPremiumNews())
                     emit(newsService.getPremiumNews().onSuccess())
                 }
             }
@@ -75,9 +72,7 @@ class NewsRepositoryImpl @Inject constructor(
                 }
                 else -> {
                     // Give the response wrapper out
-                    withContext(Dispatchers.Default) {
-                        saveBreakingNews(newsService.getBreakingNews())
-                    }
+                    saveBreakingNews(newsService.getBreakingNews())
                     emit(newsService.getBreakingNews().onSuccess())
                 }
             }

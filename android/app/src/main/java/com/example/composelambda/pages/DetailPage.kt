@@ -17,18 +17,20 @@
 package com.example.composelambda.pages
 
 import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.onCommit
@@ -48,8 +50,7 @@ import androidx.compose.ui.unit.sp
 import com.example.composelambda.Logger
 import com.example.composelambda.appNav.Actions
 import com.example.composelambda.appNav.NewsType
-import com.example.composelambda.domains.BreakingNews
-import com.example.composelambda.domains.PremiumNews
+import com.example.composelambda.async.OnResult
 import com.example.composelambda.pages.viewmodels.NewsViewModel
 import dev.chrisbanes.accompanist.coil.CoilImage
 
@@ -63,20 +64,20 @@ fun BuildDetailPage(
 
     onCommit {
         Logger("BuildDetailPage / onCommit")
+        fetchNewsDetail(vm, newsType)
     }
 
     onDispose {
         Logger("BuildDetailPage / onDispose")
     }
 
-    val detailContent = vm.parseNewsDetail(newsType)
 
     var fontSizeDelta by remember { mutableStateOf(0) }
 
     Scaffold(
         topBar = {
             BuildAppBar(
-                detailContent[0],
+                parseNewsDetail(vm = vm, newsType = newsType).first(),
                 enablePreferences = true,
                 enableSwitchTheme = enableSwitchTheme,
                 gotoPreferences = actions.gotoPreferences
@@ -89,16 +90,27 @@ fun BuildDetailPage(
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp)
             ) {
                 Spacer(modifier = Modifier.height(16.dp))
-                CoilImage(
-                    data = detailContent[2],
-                    Modifier
-                        .height(300.dp)
-                        .fillMaxWidth()
-                        .clip(
-                            shape = RoundedCornerShape(10.dp),
-                        ),
-                    contentScale = ContentScale.Crop,
-                )
+                if (parseNewsDetail(vm = vm, newsType = newsType).last().isNotEmpty()) {
+                    CoilImage(
+                        data = parseNewsDetail(vm = vm, newsType = newsType).last(),
+                        Modifier
+                            .height(300.dp)
+                            .fillMaxWidth()
+                            .clip(
+                                shape = RoundedCornerShape(10.dp),
+                            ),
+                        contentScale = ContentScale.Crop,
+                    )
+                } else {
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        CircularProgressIndicator(
+                            strokeWidth = 1.5.dp,
+                            modifier = Modifier.size(
+                                50.dp
+                            ).align(Alignment.Center).padding(10.dp),
+                        )
+                    }
+                }
                 Spacer(modifier = Modifier.height(16.dp))
                 Row(modifier = Modifier.align(alignment = Alignment.End)) {
                     TextButton(
@@ -127,7 +139,7 @@ fun BuildDetailPage(
                     }
                 }
                 Text(
-                    text = detailContent[0],
+                    text = parseNewsDetail(vm = vm, newsType = newsType).first(),
                     modifier = Modifier.fillMaxWidth(),
                     style = MaterialTheme.typography.h5.copy(
                         fontWeight = FontWeight.Bold,
@@ -137,7 +149,7 @@ fun BuildDetailPage(
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = detailContent[1],
+                    text = parseNewsDetail(vm = vm, newsType = newsType)[1],
                     style = MaterialTheme.typography.body1
                         .copy(
                             fontFamily = FontFamily.Monospace,
@@ -153,15 +165,33 @@ fun BuildDetailPage(
 }
 
 @Composable
-fun NewsViewModel.parseNewsDetail(newsType: NewsType): Array<String> {
-    return when (newsType) {
+fun parseNewsDetail(vm: NewsViewModel, newsType: NewsType): Array<String> {
+    when (newsType) {
         NewsType.BreakingNews -> {
-            val content by breakingNewsDetail.collectAsState(initial = BreakingNews.default)
-            arrayOf(content.title, content.description, content.image)
+            with(vm.breakingNewsDetail) {
+                if (this@with is OnResult.OnSuccess) {
+                    return arrayOf(data.title, data.description, data.image)
+                }
+            }
         }
         else -> {
-            val content by premiumNewsDetail.collectAsState(initial = PremiumNews.default)
-            arrayOf(content.title, content.description, content.image)
+            with(vm.premiumNewsDetail) {
+                if (this@with is OnResult.OnSuccess) {
+                    return arrayOf(data.title, data.description, data.image)
+                }
+            }
+        }
+    }
+    return arrayOf("", "", "")
+}
+
+fun fetchNewsDetail(vm: NewsViewModel, newsType: NewsType) {
+    when (newsType) {
+        NewsType.BreakingNews -> {
+            vm.fetchBreakingNewsDetail()
+        }
+        else -> {
+            vm.fetchPremiumNewsNewsDetail()
         }
     }
 }
