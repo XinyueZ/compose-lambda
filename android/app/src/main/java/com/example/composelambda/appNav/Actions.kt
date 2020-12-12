@@ -26,7 +26,7 @@ class Actions(navCtrl: NavHostController) {
         navCtrl.popBackStack()
     }
     val selectNews: (newsType: NewsType) -> Unit = {
-        navCtrl.navigate("$it")
+        navCtrl.navigate("$DETAIL/$it")
     }
     val gotoPreferences: () -> Unit = {
         navCtrl.navigate(PREFERENCES)

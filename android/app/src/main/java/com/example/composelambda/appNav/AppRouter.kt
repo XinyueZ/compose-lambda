@@ -65,7 +65,7 @@ fun NavigationContent(
                 )
             }
 
-            composable("${NewsType.BreakingNews}") {
+            composable("$DETAIL/${NewsType.BreakingNews}") {
                 Logger("DETAIL BreakingNews: ${it.destination.id}")
                 BuildDetailPage(
                     vm = newsViewModel,
@@ -75,7 +75,7 @@ fun NavigationContent(
                 )
             }
 
-            composable("${NewsType.PremiumNews}") {
+            composable("$DETAIL/${NewsType.PremiumNews}") {
                 Logger("DETAIL PremiumNews: ${it.destination.id}")
                 BuildDetailPage(
                     vm = newsViewModel,
