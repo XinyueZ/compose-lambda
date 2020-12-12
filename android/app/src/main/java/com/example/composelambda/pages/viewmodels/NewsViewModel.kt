@@ -41,10 +41,10 @@ class NewsViewModel @ViewModelInject constructor(
     private val repository: NewsRepository,
 ) : ViewModel() {
 
-    var breakingNewsDetail: OnResult<BreakingNews> by mutableStateOf(OnNothing()) //= repository.breakingNewsStorage
+    var breakingNewsDetail: OnResult<BreakingNews> by mutableStateOf(OnNothing()) // = repository.breakingNewsStorage
         private set
 
-    var premiumNewsDetail: OnResult<PremiumNews> by mutableStateOf(OnNothing()) //= repository.premiumNewsStorage
+    var premiumNewsDetail: OnResult<PremiumNews> by mutableStateOf(OnNothing()) // = repository.premiumNewsStorage
         private set
 
     var premiumNewsState: OnResult<PremiumNews> by mutableStateOf(OnNothing())

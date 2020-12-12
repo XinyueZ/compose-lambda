@@ -71,7 +71,6 @@ fun BuildDetailPage(
         Logger("BuildDetailPage / onDispose")
     }
 
-
     var fontSizeDelta by remember { mutableStateOf(0) }
 
     Scaffold(

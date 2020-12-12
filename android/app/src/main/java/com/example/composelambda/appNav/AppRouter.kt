@@ -42,6 +42,11 @@ fun NavigationContent(
     onCommit {
         Logger("Navigation-Content onCommit")
     }
+
+    onDispose {
+        Logger("Navigation-Content onDispose")
+    }
+
     val navCtrl: NavHostController = rememberNavController()
     val isFollowSystemTheme by preferencesViewModel.followSystemTheme.collectAsState(initial = true)
 
