@@ -37,20 +37,19 @@ class _PreferencesPageState extends State<PreferencesPage> {
   Widget _buildBody(BuildContext context) {
     return Column(
       children: <Widget>[
-        ListTile(
+        SwitchListTile(
+          secondary: Icon(Icons.wb_sunny_sharp),
           title: Text(
             "Follow system theme",
             style: Theme.of(context).textTheme.subtitle1,
           ),
-          trailing: Switch(
-            value: PreferencesBloc.isFollowSystemTheme(context),
-            onChanged: (final bool value) {
-              Provider.of<PreferencesBloc>(
-                context,
-                listen: false,
-              ).setFollowSystemTheme(value);
-            },
-          ),
+          value: PreferencesBloc.isFollowSystemTheme(context),
+          onChanged: (final bool value) {
+            Provider.of<PreferencesBloc>(
+              context,
+              listen: false,
+            ).setFollowSystemTheme(value);
+          },
         )
       ],
     );
