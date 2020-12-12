@@ -19,14 +19,28 @@ package com.example.composelambda.repositories
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.android.components.ApplicationComponent
+import javax.inject.Singleton
 
 @Module
-@InstallIn(ActivityRetainedComponent::class)
+@InstallIn(ApplicationComponent::class)
 abstract class RepositoryModule {
 
     @Binds
-    abstract fun giveBreakingNewsRepository(
-        breakingNewsRepository: BreakingNewsRepositoryImpl
-    ): BreakingNewsRepository
+    @Singleton
+    abstract fun giveNewsRepository(
+        repository: NewsRepositoryImpl
+    ): NewsRepository
+
+    @Binds
+    @Singleton
+    abstract fun giveNewsStorageRepository(
+        repository: NewsStorageRepositoryImpl
+    ): NewsStorageRepository
+
+    @Binds
+    @Singleton
+    abstract fun give(
+        repository: PreferencesRepositoryImpl
+    ): PreferencesRepository
 }

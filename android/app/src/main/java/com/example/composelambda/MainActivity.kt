@@ -23,19 +23,21 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.platform.setContent
 import com.example.composelambda.appNav.NavigationContent
-import com.example.composelambda.pages.viewmodels.BreakingNewsViewModel
+import com.example.composelambda.pages.viewmodels.NewsViewModel
+import com.example.composelambda.pages.viewmodels.PreferencesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private val breakingNewsViewModel: BreakingNewsViewModel by viewModels()
+    private val newsViewModel: NewsViewModel by viewModels()
+    private val preferencesViewModel: PreferencesViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AppTheme {
+            AppTheme(preferencesViewModel) {
                 Surface(color = MaterialTheme.colors.surface) {
-                    NavigationContent(breakingNewsViewModel)
+                    NavigationContent(newsViewModel, preferencesViewModel)
                 }
             }
         }
