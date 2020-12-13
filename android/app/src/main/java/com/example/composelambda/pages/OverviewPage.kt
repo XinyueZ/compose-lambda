@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -31,7 +30,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
+import androidx.compose.material.ListItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -146,23 +145,28 @@ fun BuildBreakingNewsContent(vm: NewsViewModel, newsType: NewsType, actions: Act
                     )
                 }
                 is OnError -> {
-                    Spacer(modifier = Modifier.width(16.dp))
-                    IconButton(onClick = { vm.fetchBreakingNews() }) {
-                        Icon(
-                            imageVector = Icons.Outlined.Refresh,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
-                    Text(
-                        text = "${exception.message}",
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically),
-                        style = MaterialTheme.typography.subtitle1.copy(
-                            textAlign = TextAlign.Left,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White
-                        )
+                    ListItem(
+                        modifier = Modifier.clickable(onClick = { vm.fetchBreakingNews() }),
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Outlined.Refresh,
+                                modifier = Modifier.size(50.dp)
+                            )
+                        },
+                        text = {
+                            Text(
+                                text = "${exception.message}",
+                                modifier = Modifier
+                                    .align(Alignment.CenterVertically),
+                                style = MaterialTheme.typography.subtitle1.copy(
+                                    textAlign = TextAlign.Left,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White
+                                )
+                            )
+                        }
                     )
+
                 }
                 else -> {
                     Box(modifier = Modifier.fillMaxWidth()) {
@@ -216,22 +220,26 @@ fun BuildPremiumNewsContent(vm: NewsViewModel, newsType: NewsType, actions: Acti
                     )
                 }
                 is OnError -> {
-                    Spacer(modifier = Modifier.width(16.dp))
-                    IconButton(onClick = { vm.fetchPremiumNews() }) {
-                        Icon(
-                            imageVector = Icons.Outlined.Refresh,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
-                    Text(
-                        text = "${exception.message}",
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically),
-                        style = MaterialTheme.typography.subtitle1.copy(
-                            textAlign = TextAlign.Left,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White
-                        )
+                    ListItem(
+                        modifier = Modifier.clickable(onClick = { vm.fetchPremiumNews() }),
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Outlined.Refresh,
+                                modifier = Modifier.size(50.dp)
+                            )
+                        },
+                        text = {
+                            Text(
+                                text = "${exception.message}",
+                                modifier = Modifier
+                                    .align(Alignment.CenterVertically),
+                                style = MaterialTheme.typography.subtitle1.copy(
+                                    textAlign = TextAlign.Left,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White
+                                )
+                            )
+                        }
                     )
                 }
                 else -> {
