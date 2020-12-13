@@ -166,7 +166,6 @@ fun BuildBreakingNewsContent(vm: NewsViewModel, newsType: NewsType, actions: Act
                             )
                         }
                     )
-
                 }
                 else -> {
                     Box(modifier = Modifier.fillMaxWidth()) {
