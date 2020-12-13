@@ -82,24 +82,16 @@ class _OverviewPageState extends State<OverviewPage> {
           Provider.of<NewsBloc>(context).breakingNewsState;
 
       if (breakingNewsState.hasError) {
-        return Row(
-          children: <Widget>[
-            const SizedBox(width: 16),
-            IconButton(
-              icon: Icon(Icons.refresh),
-              onPressed: () {
-                Provider.of<NewsBloc>(context, listen: false)
-                    .fetchBreakingNews();
-              },
-            ),
-            Expanded(
-              child: Text(breakingNewsState.error.toString(),
-                  textAlign: TextAlign.start,
-                  style: Theme.of(context).textTheme.subtitle1.copyWith(
-                        color: Colors.white,
-                      )),
-            ),
-          ],
+        return ListTile(
+          onTap: () {
+            Provider.of<NewsBloc>(context, listen: false).fetchBreakingNews();
+          },
+          leading: Icon(Icons.refresh),
+          title: Text(breakingNewsState.error.toString(),
+              textAlign: TextAlign.start,
+              style: Theme.of(context).textTheme.subtitle1.copyWith(
+                    color: Colors.white,
+                  )),
         );
       }
 
@@ -160,24 +152,16 @@ class _OverviewPageState extends State<OverviewPage> {
       final premiumNewsState = Provider.of<NewsBloc>(context).premiumNewsState;
 
       if (premiumNewsState.hasError) {
-        return Row(
-          children: <Widget>[
-            const SizedBox(width: 16),
-            IconButton(
-              icon: Icon(Icons.refresh),
-              onPressed: () {
-                Provider.of<NewsBloc>(context, listen: false)
-                    .fetchPremiumNews();
-              },
-            ),
-            Expanded(
-              child: Text(premiumNewsState.error.toString(),
-                  textAlign: TextAlign.start,
-                  style: Theme.of(context).textTheme.subtitle1.copyWith(
-                        color: Colors.white,
-                      )),
-            ),
-          ],
+        return ListTile(
+          onTap: () {
+            Provider.of<NewsBloc>(context, listen: false).fetchPremiumNews();
+          },
+          leading: Icon(Icons.refresh),
+          title: Text(premiumNewsState.error.toString(),
+              textAlign: TextAlign.start,
+              style: Theme.of(context).textTheme.subtitle1.copyWith(
+                    color: Colors.white,
+                  )),
         );
       }
 
