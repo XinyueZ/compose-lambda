@@ -30,8 +30,11 @@ import java.io.InputStream
 import java.io.OutputStream
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 interface NewsStorageRepository {
     suspend fun saveBreakingNews(breakingNews: BreakingNews)
@@ -45,52 +48,76 @@ class NewsStorageRepositoryImpl @Inject constructor(
     @ApplicationContext context: Context,
 ) : NewsStorageRepository {
 
+    private val mutex = Mutex()
+
     private val dataStore: DataStore<News> =
         context.createDataStore(
             fileName = "news_storage.pb",
             serializer = NewsStorageSerializer
         )
 
+    private val _breakingNewsStorage = MutableStateFlow(BreakingNews.empty)
+
     override suspend fun saveBreakingNews(breakingNews: BreakingNews) {
-        dataStore.updateData {
-            it.toBuilder()
-                .setType(News.NewsType.BREAKING_NEWS)
-                .setTitle(breakingNews.title)
-                .setDescription(breakingNews.description)
-                .setImage(breakingNews.image)
-                .build()
+        mutex.withLock {
+            dataStore.updateData {
+                it.toBuilder()
+                    .setType(News.NewsType.BREAKING_NEWS)
+                    .setTitle(breakingNews.title)
+                    .setDescription(breakingNews.description)
+                    .setImage(breakingNews.image)
+                    .build()
+            }
+            _breakingNewsStorage.value = breakingNews
         }
     }
 
-    override val breakingNewsStorage: Flow<BreakingNews> = dataStore.data.filter {
-        it.type == News.NewsType.BREAKING_NEWS
-    }.map {
-        BreakingNews(
-            it.title,
-            it.description,
-            it.image
-        )
+
+    override val breakingNewsStorage: Flow<BreakingNews> by lazy {
+        dataStore.data.filter {
+            it.type == News.NewsType.BREAKING_NEWS
+        }.map {
+            BreakingNews(
+                it.title,
+                it.description,
+                it.image
+            ).apply {
+                _breakingNewsStorage.value = this
+            }
+        }
+        _breakingNewsStorage
     }
+
+    private val _premiumNewsStorage = MutableStateFlow(PremiumNews.empty)
 
     override suspend fun savePremiumNews(premiumNews: PremiumNews) {
-        dataStore.updateData {
-            it.toBuilder()
-                .setType(News.NewsType.PREMIUM_NEWS)
-                .setTitle(premiumNews.title)
-                .setDescription(premiumNews.description)
-                .setImage(premiumNews.image)
-                .build()
+        mutex.withLock {
+            dataStore.updateData {
+                it.toBuilder()
+                    .setType(News.NewsType.PREMIUM_NEWS)
+                    .setTitle(premiumNews.title)
+                    .setDescription(premiumNews.description)
+                    .setImage(premiumNews.image)
+                    .build()
+            }
+            _premiumNewsStorage.value = premiumNews
         }
     }
 
-    override val premiumNewsStorage: Flow<PremiumNews> = dataStore.data.filter {
-        it.type == News.NewsType.PREMIUM_NEWS
-    }.map {
-        PremiumNews(
-            it.title,
-            it.description,
-            it.image
-        )
+
+    override val premiumNewsStorage: Flow<PremiumNews> by lazy {
+        dataStore.data.filter {
+            it.type == News.NewsType.PREMIUM_NEWS
+        }.map {
+            PremiumNews(
+                it.title,
+                it.description,
+                it.image
+            ).apply {
+                _premiumNewsStorage.value = this
+            }
+        }
+        _premiumNewsStorage
     }
 }
 
