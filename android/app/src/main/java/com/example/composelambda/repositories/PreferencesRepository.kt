@@ -20,7 +20,8 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.preferencesKey
+import androidx.datastore.preferences.core.Preferences.Key
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.createDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -36,8 +37,8 @@ class PreferencesRepositoryImpl @Inject constructor(
     @ApplicationContext context: Context,
 ) : PreferencesRepository {
 
-    private val keyFollowSystemTheme: Preferences.Key<Boolean> =
-        preferencesKey("key_follow_system_key")
+    private val keyFollowSystemTheme: Key<Boolean> =
+        booleanPreferencesKey("key_follow_system_key")
 
     private val dataStore: DataStore<Preferences> =
         context.createDataStore(
