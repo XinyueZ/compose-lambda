@@ -21,8 +21,6 @@ class AppHttpClient extends BaseClient {
       for (var i = 0; i < 3; i++) {
         final response = await _send(request);
         if (response.statusCode >= 300 && response.statusCode <= 499) {
-          // Need exclude: 404, 409, 412, they are reserved code by MOIA Fleet.
-          // Check https://github.com/moia-dev/fleet-backend/blob/develop/docs/fleet-docs-swagger_app.json
           switch (response.statusCode) {
             case HttpStatus.forbidden:
             case HttpStatus.notFound:
