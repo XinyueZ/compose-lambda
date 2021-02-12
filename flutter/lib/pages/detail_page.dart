@@ -20,7 +20,6 @@ class DetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final detailWidget = DetailWidget(news: news);
-    // return detailWidget;
 
     return Scaffold(
       appBar: TopAppBar(
