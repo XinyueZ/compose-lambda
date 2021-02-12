@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -64,16 +63,14 @@ class _DetailWidgetState extends State<DetailWidget> {
   double _delta = 0;
 
   @override
-  void initState() {
-    super.initState();
-    scheduleMicrotask(() {
-      if (widget.news is BreakingNews) {
-        Provider.of<NewsBloc>(context, listen: false).fetchBreakingNewsDetail();
-      }
-      if (widget.news is PremiumNews) {
-        Provider.of<NewsBloc>(context, listen: false).fetchPremiumNewsDetail();
-      }
-    });
+  void didChangeDependencies() {
+    if (widget.news is BreakingNews) {
+      Provider.of<NewsBloc>(context, listen: false).fetchBreakingNewsDetail();
+    }
+    if (widget.news is PremiumNews) {
+      Provider.of<NewsBloc>(context, listen: false).fetchPremiumNewsDetail();
+    }
+    super.didChangeDependencies();
   }
 
   @override
