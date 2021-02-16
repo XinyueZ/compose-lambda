@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -10,7 +9,7 @@ import 'package:flutter_compose_lambda/pages/blocs/news_bloc.dart';
 import 'package:flutter_compose_lambda/pages/blocs/preferences_bloc.dart';
 import 'package:provider/provider.dart';
 
-class DetailPage extends StatefulWidget {
+class DetailPage extends StatelessWidget {
   DetailPage({
     Key key,
     @required this.news,
@@ -19,34 +18,36 @@ class DetailPage extends StatefulWidget {
   final dynamic news;
 
   @override
-  _DetailPageState createState() => _DetailPageState();
+  Widget build(BuildContext context) {
+    final detailWidget = DetailWidget(news: news);
+
+    return Scaffold(
+      appBar: TopAppBar(
+        context: context,
+        title: detailWidget.parseNewsDetail(context).first,
+        enablePreferences: true,
+        enableSwitchTheme: !PreferencesBloc.isFollowSystemTheme(context),
+      ),
+      body: detailWidget,
+    );
+  }
 }
 
-class _DetailPageState extends State<DetailPage> {
-  double _delta = 0;
+class DetailWidget extends StatefulWidget {
+  DetailWidget({
+    Key key,
+    @required this.news,
+  }) : super(key: key);
 
-  @override
-  void initState() {
-    super.initState();
-    scheduleMicrotask(() {
-      if (widget.news is BreakingNews) {
-        Provider.of<NewsBloc>(context, listen: false).fetchBreakingNewsDetail();
-      }
-      if (widget.news is PremiumNews) {
-        Provider.of<NewsBloc>(context, listen: false).fetchPremiumNewsDetail();
-      }
-    });
-  }
+  final dynamic news;
 
-  Iterable<String> _parseNewsDetail() {
-    if (widget.news is BreakingNews &&
-        Provider.of<NewsBloc>(context).breakingNewsDetail.hasData) {
+  Iterable<String> parseNewsDetail(BuildContext context) {
+    if (news is BreakingNews && Provider.of<NewsBloc>(context).breakingNewsDetail.hasData) {
       final data = Provider.of<NewsBloc>(context).breakingNewsDetail.data;
       return data;
     }
 
-    if (widget.news is PremiumNews &&
-        Provider.of<NewsBloc>(context).premiumNewsDetail.hasData) {
+    if (news is PremiumNews && Provider.of<NewsBloc>(context).premiumNewsDetail.hasData) {
       final data = Provider.of<NewsBloc>(context).premiumNewsDetail.data;
       return data;
     }
@@ -54,16 +55,26 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   @override
+  _DetailWidgetState createState() => _DetailWidgetState();
+}
+
+class _DetailWidgetState extends State<DetailWidget> {
+  double _delta = 0;
+
+  @override
+  void didChangeDependencies() {
+    if (widget.news is BreakingNews) {
+      Provider.of<NewsBloc>(context, listen: false).fetchBreakingNewsDetail();
+    }
+    if (widget.news is PremiumNews) {
+      Provider.of<NewsBloc>(context, listen: false).fetchPremiumNewsDetail();
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: TopAppBar(
-        context: context,
-        title: _parseNewsDetail().first,
-        enablePreferences: true,
-        enableSwitchTheme: !PreferencesBloc.isFollowSystemTheme(context),
-      ),
-      body: _buildBody(context),
-    );
+    return _buildBody(context);
   }
 
   Widget _buildBody(BuildContext context) {
@@ -75,11 +86,11 @@ class _DetailPageState extends State<DetailPage> {
             const SizedBox(
               height: 16,
             ),
-            if (_parseNewsDetail().last != null)
+            if (widget.parseNewsDetail(context).last != null)
               ClipRRect(
                 borderRadius: BorderRadius.circular(10.0),
                 child: Image.network(
-                  _parseNewsDetail().last,
+                  widget.parseNewsDetail(context).last,
                 ),
               ),
             const SizedBox(
@@ -116,24 +127,22 @@ class _DetailPageState extends State<DetailPage> {
               height: 16,
             ),
             Text(
-              _parseNewsDetail().first,
+              widget.parseNewsDetail(context).first,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.headline5.copyWith(
                     fontWeight: FontWeight.bold,
-                    fontSize:
-                        Theme.of(context).textTheme.headline5.fontSize + _delta,
+                    fontSize: Theme.of(context).textTheme.headline5.fontSize + _delta,
                   ),
             ),
             const SizedBox(
               height: 16,
             ),
             Text(
-              _parseNewsDetail().toList()[1],
+              widget.parseNewsDetail(context).toList()[1],
               style: Theme.of(context).textTheme.bodyText1.copyWith(
                     fontFamily: "monospace",
                     letterSpacing: 1.2,
-                    fontSize:
-                        Theme.of(context).textTheme.bodyText1.fontSize + _delta,
+                    fontSize: Theme.of(context).textTheme.bodyText1.fontSize + _delta,
                   ),
             ),
             const SizedBox(

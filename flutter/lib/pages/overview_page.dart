@@ -6,6 +6,7 @@ import 'package:flutter_compose_lambda/app_nav/nav_const.dart';
 import 'package:flutter_compose_lambda/pages/app_bar.dart';
 import 'package:flutter_compose_lambda/pages/blocs/news_bloc.dart';
 import 'package:flutter_compose_lambda/pages/blocs/preferences_bloc.dart';
+import 'package:flutter_compose_lambda/pages/detail_page.dart';
 import 'package:provider/provider.dart';
 
 class OverviewPage extends StatefulWidget {
@@ -21,6 +22,8 @@ class OverviewPage extends StatefulWidget {
 }
 
 class _OverviewPageState extends State<OverviewPage> {
+  dynamic _selectedNews;
+
   @override
   void initState() {
     super.initState();
@@ -44,18 +47,70 @@ class _OverviewPageState extends State<OverviewPage> {
   }
 
   Widget _buildBody(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth > 600) {
+          return Row(
+            children: <Widget>[
+              Expanded(
+                flex: 2,
+                child: _newsList(
+                  context,
+                  false,
+                  (dynamic data) {
+                    setState(() {
+                      _selectedNews = data;
+                    });
+                  },
+                ),
+              ),
+              Expanded(
+                flex: 4,
+                child: _selectedNews == null
+                    ? Placeholder()
+                    : DetailWidget(
+                        news: _selectedNews,
+                      ),
+              ),
+            ],
+          );
+        }
+        return _newsList(
+          context,
+          true,
+          (dynamic data) {
+            _gotoDetail(data);
+          },
+        );
+      },
+    );
+  }
+
+  Widget _newsList(
+    BuildContext buildContext,
+    bool showThumbnail,
+    Function(dynamic data) onNewsTapped,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Column(
         children: <Widget>[
           _buildOverviewCard(
             context,
-            _buildBreakingNewsContent(context),
+            _buildBreakingNewsContent(
+              context,
+              showThumbnail,
+              onNewsTapped,
+            ),
           ),
           const SizedBox(height: 3.0),
           _buildOverviewCard(
             context,
-            _buildPremiumNewsContent(context),
+            _buildPremiumNewsContent(
+              context,
+              showThumbnail,
+              onNewsTapped,
+            ),
           ),
         ],
       ),
@@ -76,10 +131,13 @@ class _OverviewPageState extends State<OverviewPage> {
     );
   }
 
-  Widget _buildBreakingNewsContent(BuildContext context) {
+  Widget _buildBreakingNewsContent(
+    BuildContext context,
+    bool showThumbnail,
+    Function(dynamic data) onNewsTapped,
+  ) {
     Widget _c() {
-      final breakingNewsState =
-          Provider.of<NewsBloc>(context).breakingNewsState;
+      final breakingNewsState = Provider.of<NewsBloc>(context).breakingNewsState;
 
       if (breakingNewsState.hasError) {
         return ListTile(
@@ -112,24 +170,28 @@ class _OverviewPageState extends State<OverviewPage> {
         case ConnectionState.done:
           return InkWell(
             onTap: () {
-              _gotoDetail(breakingNewsState.data);
+              onNewsTapped(breakingNewsState.data);
             },
             child: Row(
               children: <Widget>[
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: Image.network(
-                    breakingNewsState.data.image,
-                    width: 120,
+                if (showThumbnail)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Image.network(
+                      breakingNewsState.data.image,
+                      width: 120,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 16),
+                if (showThumbnail) const SizedBox(width: 16),
                 Expanded(
-                  child: Text(breakingNewsState.data.title,
-                      textAlign: TextAlign.start,
-                      style: Theme.of(context).textTheme.subtitle1.copyWith(
-                            color: Colors.white,
-                          )),
+                  child: Padding(
+                    padding: EdgeInsets.all(showThumbnail ? 0.0 : 20.0),
+                    child: Text(breakingNewsState.data.title,
+                        textAlign: TextAlign.start,
+                        style: Theme.of(context).textTheme.subtitle1.copyWith(
+                              color: Colors.white,
+                            )),
+                  ),
                 ),
               ],
             ),
@@ -147,7 +209,11 @@ class _OverviewPageState extends State<OverviewPage> {
         ));
   }
 
-  Widget _buildPremiumNewsContent(BuildContext context) {
+  Widget _buildPremiumNewsContent(
+    BuildContext context,
+    bool showThumbnail,
+    Function(dynamic data) onNewsTapped,
+  ) {
     Widget _c() {
       final premiumNewsState = Provider.of<NewsBloc>(context).premiumNewsState;
 
@@ -182,24 +248,28 @@ class _OverviewPageState extends State<OverviewPage> {
         case ConnectionState.done:
           return InkWell(
             onTap: () {
-              _gotoDetail(premiumNewsState.data);
+              onNewsTapped(premiumNewsState.data);
             },
             child: Row(
               children: <Widget>[
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: Image.network(
-                    premiumNewsState.data.image,
-                    width: 120,
+                if (showThumbnail)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Image.network(
+                      premiumNewsState.data.image,
+                      width: 120,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 16),
+                if (showThumbnail) const SizedBox(width: 16),
                 Expanded(
-                  child: Text(premiumNewsState.data.title,
-                      textAlign: TextAlign.start,
-                      style: Theme.of(context).textTheme.subtitle1.copyWith(
-                            color: Colors.white,
-                          )),
+                  child: Padding(
+                    padding: EdgeInsets.all(showThumbnail ? 0.0 : 20.0),
+                    child: Text(premiumNewsState.data.title,
+                        textAlign: TextAlign.start,
+                        style: Theme.of(context).textTheme.subtitle1.copyWith(
+                              color: Colors.white,
+                            )),
+                  ),
                 ),
               ],
             ),
